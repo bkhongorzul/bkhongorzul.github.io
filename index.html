@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="ko" data-lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Khongorzul | Portfolio</title>
+  <meta name="description" content="Khongorzul Battumur — AI · Frontend Portfolio">
+  <style>
+    :root {
+      --navy: #1F3864; --navy-2: #2E5597; --ink: #1d2433; --muted: #5b6478;
+      --line: #e3e7ef; --bg: #f6f8fb; --card: #ffffff; --mark: #fff3bf;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: "Pretendard", "Apple SD Gothic Neo", "Malgun Gothic", "Noto Sans KR", system-ui, sans-serif;
+      color: var(--ink); background: var(--bg); line-height: 1.7; font-size: 16px; word-break: keep-all;
+    }
+    a { color: var(--navy-2); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    .wrap { max-width: 920px; margin: 0 auto; padding: 0 20px; }
+
+    /* language switch: show only the active language */
+    html[data-lang="ko"] [lang="en"]:not(html) { display: none !important; }
+    html[data-lang="en"] [lang="ko"]:not(html) { display: none !important; }
+
+    nav { position: sticky; top: 0; z-index: 10; background: rgba(255,255,255,.94);
+          backdrop-filter: blur(6px); border-bottom: 1px solid var(--line); }
+    nav .wrap { display: flex; justify-content: space-between; align-items: center; height: 56px; gap: 16px; }
+    nav .logo { font-weight: 800; color: var(--navy); letter-spacing: -.02em; }
+    nav ul { list-style: none; display: flex; gap: 18px; font-size: 14px; margin-left: auto; }
+    nav ul a { color: var(--muted); }
+    .lang-toggle { display: flex; border: 1px solid var(--line); border-radius: 8px; overflow: hidden; flex-shrink: 0; }
+    .lang-toggle button { border: 0; background: #fff; color: var(--muted); font: inherit; font-size: 13px;
+                          font-weight: 700; padding: 5px 11px; cursor: pointer; }
+    .lang-toggle button.on { background: var(--navy); color: #fff; }
+
+    header.hero { background: var(--navy); color: #fff; padding: 72px 0 64px; }
+    .hero h1 { font-size: 40px; line-height: 1.25; letter-spacing: -.02em; }
+    .hero .sub { display: block; font-size: 18px; font-weight: 400; opacity: .82; margin-top: 8px; }
+    .hero p.lead { margin-top: 20px; max-width: 660px; font-size: 17px; opacity: .93; }
+    .tags { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 20px; }
+    .tags span { border: 1px solid rgba(255,255,255,.35); border-radius: 999px; padding: 3px 12px; font-size: 13px; }
+    .cta { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 28px; }
+    .btn { display: inline-block; padding: 10px 18px; border-radius: 8px; font-weight: 600; font-size: 15px; }
+    .btn.primary { background: #fff; color: var(--navy); }
+    .btn.ghost { border: 1px solid rgba(255,255,255,.5); color: #fff; }
+    .btn:hover { text-decoration: none; opacity: .9; }
+
+    section { padding: 56px 0 8px; }
+    h2 { font-size: 24px; color: var(--navy); letter-spacing: -.01em; margin-bottom: 18px;
+         padding-bottom: 8px; border-bottom: 2px solid var(--navy); display: inline-block; }
+    h3 { font-size: 19px; margin-bottom: 4px; }
+    .meta { color: var(--muted); font-size: 14px; margin-bottom: 12px; }
+    .card { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 24px; margin-bottom: 16px; }
+    .card ul { padding-left: 20px; }
+    .card li { margin: 4px 0; }
+
+    .featured { border-top: 4px solid var(--navy); }
+    .badge { display: inline-block; background: var(--navy); color: #fff; font-size: 12px; font-weight: 700;
+             border-radius: 4px; padding: 2px 8px; margin-bottom: 8px; }
+    .badge.award { background: #b7791f; }
+    .grid { display: grid; grid-template-columns: 140px 1fr; gap: 14px 20px; margin-top: 16px; }
+    .grid dt { font-weight: 700; color: var(--navy); }
+    .grid dd ul { padding-left: 18px; }
+    .stack { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 10px; }
+    .stack code { background: #eef2f9; color: var(--navy); border-radius: 6px; padding: 2px 8px; font-size: 13px;
+                  font-family: ui-monospace, Consolas, monospace; }
+    .links { display: flex; gap: 14px; flex-wrap: wrap; margin-top: 18px; font-weight: 600; }
+    .two { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    .skills dt { font-weight: 700; margin-top: 10px; }
+    .skills dt:first-child { margin-top: 0; }
+    .skills dd { color: var(--muted); }
+
+    /* yellow = fill in before publishing */
+    .todo { background: var(--mark); border-radius: 3px; padding: 0 4px; }
+
+    footer { margin-top: 56px; padding: 28px 0; border-top: 1px solid var(--line); color: var(--muted); font-size: 14px; text-align: center; }
+
+    @media (max-width: 760px) {
+      nav ul { display: none; }
+      .hero h1 { font-size: 30px; }
+      .grid { grid-template-columns: 1fr; gap: 4px; }
+      .grid dd { margin-bottom: 10px; }
+      .two { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<nav>
+  <div class="wrap">
+    <a class="logo" href="#">Khongorzul</a>
+    <ul>
+      <li><a href="#about"><span lang="ko">소개</span><span lang="en">About</span></a></li>
+      <li><a href="#project"><span lang="ko">대표 프로젝트</span><span lang="en">Featured</span></a></li>
+      <li><a href="#others"><span lang="ko">프로젝트</span><span lang="en">Projects</span></a></li>
+      <li><a href="#experience"><span lang="ko">경험</span><span lang="en">Experience</span></a></li>
+      <li><a href="#skills"><span lang="ko">기술</span><span lang="en">Skills</span></a></li>
+    </ul>
+    <div class="lang-toggle" role="group" aria-label="Language">
+      <button type="button" data-set="ko">KO</button>
+      <button type="button" data-set="en">EN</button>
+    </div>
+  </div>
+</nav>
+
+<header class="hero">
+  <div class="wrap">
+    <h1>
+      <span lang="ko">안녕하세요, Khongorzul입니다.</span>
+      <span lang="en">Hi, I'm Khongorzul.</span>
+      <span class="sub" lang="ko">바트투무르 헌거르졸 · 부산대학교 정보컴퓨터공학부 인공지능전공 · 2027년 2월 졸업 예정</span>
+      <span class="sub" lang="en">Khongorzul Battumur · AI major, Pusan National University · Graduating Feb 2027</span>
+    </h1>
+    <p class="lead" lang="ko">
+      실용적인 AI 시스템으로 실제 사용자의 문제를 해결하는 일에 관심이 있습니다.
+      여러 프로젝트와 해커톤에서 AI 기반 웹 서비스를 기획부터 완성까지 만들어 왔으며,
+      한국어·영어·몽골어를 사용합니다.
+    </p>
+    <p class="lead" lang="en">
+      I'm interested in where practical AI systems meet real user problems.
+      I've built and shipped AI-powered web applications across several projects and hackathons,
+      and I work in Korean, English and Mongolian.
+    </p>
+    <div class="tags">
+      <span>AI Agents · LLM</span><span>Frontend · UI/UX</span><span>Data Visualization</span>
+    </div>
+    <div class="cta">
+      <a class="btn primary" href="resume-ko.pdf" download lang="ko">이력서 PDF (국문)</a>
+      <a class="btn primary" href="resume-en.pdf" download lang="en">Resume PDF (English)</a>
+      <a class="btn ghost" href="resume-en.pdf" download lang="ko">English Resume</a>
+      <a class="btn ghost" href="resume-ko.pdf" download lang="en">국문 이력서</a>
+      <a class="btn ghost" href="https://github.com/bkhongorzul" target="_blank" rel="noopener">GitHub</a>
+      <a class="btn ghost" href="mailto:khongorzul.batt@gmail.com">Email</a>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <!-- ===================== ABOUT ===================== -->
+  <section id="about">
+    <h2><span lang="ko">소개</span><span lang="en">About</span></h2>
+    <div class="card">
+      <ul lang="ko">
+        <li><b>관심 분야</b> — AI 에이전트·LLM을 활용한 서비스, 그리고 그 결과를 보여주는 프론트엔드</li>
+        <li><b>강점</b> — 아이디어 구상부터 화면 구현, 배포까지 혼자서도 끝까지 완성해 본 경험</li>
+        <li><b>언어</b> — 몽골어(모국어), 한국어(TOPIK 6급), 영어(IELTS 7.0)</li>
+        <li><b>학력</b> — 부산대학교 정보컴퓨터공학부 인공지능전공 (2023.03 – 2027.02 예정), 정부초청장학생(GKS)</li>
+      </ul>
+      <ul lang="en">
+        <li><b>Interests</b> — services built on AI agents and LLMs, and the frontends that present their results</li>
+        <li><b>Strength</b> — taking projects end to end, from the idea through the UI to a working deployment</li>
+        <li><b>Languages</b> — Mongolian (native), Korean (TOPIK 6), English (IELTS 7.0)</li>
+        <li><b>Education</b> — B.S. Computer Science and Engineering (AI major), Pusan National University, Mar 2023 – Feb 2027; Korean Government Scholarship (GKS)</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- ===================== FEATURED: TRADIFY ===================== -->
+  <section id="project">
+    <h2><span lang="ko">대표 프로젝트</span><span lang="en">Featured Project</span></h2>
+    <article class="card featured">
+      <span class="badge"><span lang="ko">졸업과제 · 2026</span><span lang="en">Graduation Project · 2026</span></span>
+      <h3>Tradify — <span lang="ko">실시간 AI 기반 주식 거래 시스템</span><span lang="en">Real-Time AI Stock Trading System</span></h3>
+      <p class="meta">
+        <span lang="ko">팀 AI Got This (팀번호 31) · 부산대학교 정보컴퓨터공학부 2026 졸업과제</span>
+        <span lang="en">Team “AI Got This” (#31) · PNU Computer Science and Engineering capstone, 2026</span>
+      </p>
+
+      <dl class="grid">
+        <dt><span lang="ko">문제 정의</span><span lang="en">Problem</span></dt>
+        <dd>
+          <span lang="ko">개인 투자자는 실시간으로 쏟아지는 시세 데이터를 직접 해석하고 매매 시점을 판단하기 어렵습니다.
+          Tradify는 AI 예측 결과와 거래 전략을 결합해, 매매 판단에 필요한 정보를 한 화면에서 실시간으로 제공합니다.</span>
+          <span lang="en">Individual investors struggle to read a constant stream of live market data and decide when to trade.
+          Tradify combines AI price predictions with a trading strategy and shows the information needed for a decision on one live screen.</span>
+        </dd>
+
+        <dt><span lang="ko">나의 역할</span><span lang="en">My Role</span></dt>
+        <dd>
+          <ul lang="ko">
+            <li><b>Prediction Service</b> — 주가 예측 모델의 결과를 서비스에서 쓸 수 있도록 제공</li>
+            <li><b>Strategy &amp; Decision Engine</b> — 예측 결과를 바탕으로 매수·매도·보유를 판단하는 로직</li>
+            <li><b>프론트엔드 전체</b> — 대시보드, 차트, 거래 화면 등 모든 사용자 화면 설계·구현</li>
+          </ul>
+          <ul lang="en">
+            <li><b>Prediction Service</b> — served the price-prediction model's output to the rest of the system</li>
+            <li><b>Strategy &amp; Decision Engine</b> — logic that turns predictions into buy / sell / hold decisions</li>
+            <li><b>Entire frontend</b> — designed and built every user-facing screen: dashboard, charts, trading views</li>
+          </ul>
+        </dd>
+
+        <dt><span lang="ko">기술</span><span lang="en">Tech</span></dt>
+        <dd>
+          <!-- TODO: 실제로 사용한 기술만 남기세요 / keep only tech you actually used -->
+          <div class="stack" style="margin-top:0">
+            <code class="todo">Frontend framework</code>
+            <code class="todo">Prediction model / library</code>
+            <code class="todo">Backend / real-time</code>
+          </div>
+        </dd>
+
+        <dt><span lang="ko">결과</span><span lang="en">Results</span></dt>
+        <dd>
+          <ul lang="ko">
+            <li>실시간 시세 → AI 예측 → 전략 판단 → 화면 표시로 이어지는 전체 흐름 구현</li>
+            <li>2026 부산대학교 졸업과제 발표회에서 포스터 발표</li>
+            <li><span class="todo">테스트 리포트의 실측 수치 1~2개 (예: 예측 정확도, 응답 지연 시간)</span></li>
+          </ul>
+          <ul lang="en">
+            <li>Implemented the full flow: live prices → AI prediction → strategy decision → on-screen display</li>
+            <li>Presented as a poster at the 2026 PNU graduation project symposium</li>
+            <li><span class="todo">1–2 measured numbers from the test report (e.g., prediction accuracy, latency)</span></li>
+          </ul>
+        </dd>
+
+        <dt><span lang="ko">배운 점</span><span lang="en">Takeaway</span></dt>
+        <dd>
+          <span lang="ko">예측값이 좋아도 사용자가 그 의미를 이해하지 못하면 쓸 수 없다는 것을 배웠습니다.
+          그래서 예측 결과와 판단 근거를 함께 보여주는 화면 구성에 가장 많은 시간을 썼습니다.</span>
+          <span lang="en">A good prediction is useless if the user can't understand what it means.
+          That's why I spent the most time designing screens that show each prediction together with the reasoning behind the decision.</span>
+        </dd>
+      </dl>
+
+      <div class="links">
+        <!-- TODO: 실제 주소로 바꾸세요 / replace with real links -->
+        <a class="todo" href="#" target="_blank" rel="noopener"><span lang="ko">▶ 데모 / 시연 영상</span><span lang="en">▶ Demo video</span></a>
+        <a class="todo" href="https://github.com/bkhongorzul" target="_blank" rel="noopener"><span lang="ko">⌘ 소스 코드</span><span lang="en">⌘ Source code</span></a>
+      </div>
+    </article>
+  </section>
+
+  <!-- ===================== OTHER PROJECTS ===================== -->
+  <section id="others">
+    <h2><span lang="ko">프로젝트 · 수상</span><span lang="en">Projects &amp; Awards</span></h2>
+    <div class="two">
+
+      <article class="card">
+        <span class="badge award"><span lang="ko">장려상 · 4위</span><span lang="en">Encouragement Award · 4th</span></span>
+        <h3>ISIA — <span lang="ko">AI 프로젝트 평가 시스템</span><span lang="en">AI Project Evaluation System</span></h3>
+        <p class="meta">Upstage PNU AI Agent Hackathon · 2025.11</p>
+        <ul lang="ko">
+          <li>프로젝트나 사업 아이디어를 제출하면 기술 실현 가능성, 시장성, 리스크를 분석해 종합 점수와 등급이 담긴 <b>AI 평가 보고서</b>를 돌려주는 웹 도구</li>
+          <li>아이디어 기획과 전체 구현 담당: 입력 폼, 병렬로 동작하는 AI 에이전트 3개, 등급·점수·요약을 보여주는 결과 화면</li>
+          <li>실제 제출물로 테스트</li>
+        </ul>
+        <ul lang="en">
+          <li>A web tool that takes a project or business idea and returns a full <b>AI evaluation report</b> on technical viability, market potential and risk, with an overall score and grade</li>
+          <li>Came up with the idea and built it end to end: intake form, three AI agents running in parallel, and a results page with grade, score and summary</li>
+          <li>Tested with real submissions</li>
+        </ul>
+        <div class="stack"><code>Upstage Solar LLM</code><code>n8n</code><code>Multi-agent</code></div>
+      </article>
+
+      <article class="card">
+        <span class="badge award"><span lang="ko">3위</span><span lang="en">3rd Place</span></span>
+        <h3>BizVision — <span lang="ko">상권 입지 분석 플랫폼</span><span lang="en">Business Location Intelligence</span></h3>
+        <p class="meta">PNU Tech Week · 2025.09</p>
+        <ul lang="ko">
+          <li>창업 예정자가 지역과 업종(예: 특정 동네의 카페)을 고르면 유동인구, 주변 경쟁 업체, 상권 추이를 바탕으로 사업성을 알려주는 플랫폼</li>
+          <li>실제 지도 데이터와 수년간의 공공 상권 데이터를 결합</li>
+          <li>React로 프론트엔드와 인터랙티브 대시보드 구현 (지도·위치, 내비게이션, 데이터 그래프)</li>
+        </ul>
+        <ul lang="en">
+          <li>Pick a location and a business type (e.g., a café in a specific district) and the platform rates its viability from foot traffic, nearby competitors and area trends</li>
+          <li>Combined real map data with years of government commercial-district data</li>
+          <li>Built the frontend in React with an interactive dashboard (map/location, navigation, data graphs)</li>
+        </ul>
+        <div class="stack"><code>React</code><code>Map API</code><code>Public data</code></div>
+      </article>
+
+      <article class="card">
+        <span class="badge"><span lang="ko">리드 개발자</span><span lang="en">Lead Developer</span></span>
+        <h3>CryptoLens — <span lang="ko">암호화폐 감성 분석 도구</span><span lang="en">Crypto Sentiment Analysis</span></h3>
+        <ul lang="ko">
+          <li>여러 암호화폐 뉴스 소스를 한 번에 분석해 시장 분위기가 <b>강세·약세·혼조</b> 중 어디인지 판단</li>
+          <li>주류 언론과 개인 투자자 커뮤니티의 의견이 엇갈릴 때 이를 표시</li>
+          <li>30초 이내에 점수가 매겨진 분석 보고서를 생성</li>
+        </ul>
+        <ul lang="en">
+          <li>Scans many crypto news sources at once and tells you whether overall sentiment is <b>bullish, bearish or split</b></li>
+          <li>Flags when mainstream media and retail communities are saying different things</li>
+          <li>Produces a scored breakdown report in under 30 seconds</li>
+        </ul>
+        <div class="stack"><code>LLM</code><code>Sentiment Analysis</code><code>Divergence detection</code></div>
+      </article>
+
+    </div>
+  </section>
+
+  <!-- ===================== EXPERIENCE ===================== -->
+  <section id="experience">
+    <h2><span lang="ko">경험</span><span lang="en">Experience</span></h2>
+    <div class="card">
+      <h3><span lang="ko">지니에듀테크(주) — 프론트엔드 인턴</span><span lang="en">Genie Edutech Co., Ltd. — Frontend Intern</span></h3>
+      <p class="meta">2026.07 – 2026.08</p>
+      <ul lang="ko">
+        <li>회사 홈페이지 UI/UX 리뉴얼 및 프론트엔드 구현</li>
+        <li>신규 사업 부문 홈페이지를 처음부터 제작</li>
+      </ul>
+      <ul lang="en">
+        <li>Redesigned the company homepage UI/UX and implemented the renewed frontend</li>
+        <li>Built a new homepage for a separate business line from scratch</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h3><span lang="ko">몽골 온라인 뉴스 매체 — 번역·기사 작성 (원격)</span><span lang="en">Mongolian Online News — Translator &amp; Writer (Remote)</span></h3>
+      <p class="meta"><span lang="ko">2024 – 현재</span><span lang="en">2024 – Present</span></p>
+      <ul lang="ko"><li>영어·한국어 뉴스를 몽골어로 번역해 기사로 작성, 학업과 병행</li></ul>
+      <ul lang="en"><li>Translate and write news articles from English and Korean into Mongolian alongside a full course load</li></ul>
+    </div>
+    <div class="card">
+      <h3><span lang="ko">GKS 신입생 멘토 — 부산대학교</span><span lang="en">GKS Student Mentor — Pusan National University</span></h3>
+      <p class="meta">2024.09 – 2025.02</p>
+      <ul lang="ko"><li>새로 입국한 GKS 장학생의 학적 등록부터 행정 절차, 캠퍼스 생활 적응까지 지원</li></ul>
+      <ul lang="en"><li>Helped newly arrived GKS students with university enrollment, admin paperwork and settling into campus life</li></ul>
+    </div>
+    <div class="card">
+      <h3><span lang="ko">영어 강사 — 몽골 울란바토르</span><span lang="en">English Tutor — Ulaanbaatar, Mongolia</span></h3>
+      <p class="meta">2022.06 – 2022.08</p>
+      <ul lang="ko"><li>개인 및 소그룹 대상 영어 회화·시험 대비 수업</li></ul>
+      <ul lang="en"><li>Taught individuals and small groups, focusing on conversation skills and exam preparation</li></ul>
+    </div>
+  </section>
+
+  <!-- ===================== SKILLS ===================== -->
+  <section id="skills">
+    <h2><span lang="ko">기술</span><span lang="en">Skills</span></h2>
+    <div class="card">
+      <dl class="skills">
+        <dt><span lang="ko">프로그래밍 언어</span><span lang="en">Languages</span></dt><dd>Python, JavaScript, Java, R</dd>
+        <dt>AI · LLM</dt><dd>Multi-Agent Systems, LLM Orchestration, n8n, Sentiment Analysis</dd>
+        <dt><span lang="ko">웹 · 도구</span><span lang="en">Web &amp; Tools</span></dt><dd>React, Node.js, Tailwind CSS, Figma, Git/GitHub</dd>
+        <dt><span lang="ko">언어</span><span lang="en">Spoken</span></dt>
+        <dd><span lang="ko">몽골어(모국어), 한국어(TOPIK 6급), 영어(IELTS 7.0)</span><span lang="en">Mongolian (native), Korean (TOPIK 6), English (IELTS 7.0)</span></dd>
+      </dl>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    © 2026 Khongorzul Battumur · <a href="mailto:khongorzul.batt@gmail.com">khongorzul.batt@gmail.com</a> ·
+    <a href="https://github.com/bkhongorzul" target="_blank" rel="noopener">github.com/bkhongorzul</a>
+  </div>
+</footer>
+
+<script>
+  (function () {
+    var root = document.documentElement;
+    var buttons = document.querySelectorAll('.lang-toggle button');
+    function setLang(lang) {
+      root.setAttribute('data-lang', lang);
+      root.setAttribute('lang', lang);
+      buttons.forEach(function (b) { b.classList.toggle('on', b.dataset.set === lang); });
+      try { localStorage.setItem('lang', lang); } catch (e) {}
+    }
+    var saved = null;
+    try { saved = localStorage.getItem('lang'); } catch (e) {}
+    var params = new URLSearchParams(location.search);
+    setLang(params.get('lang') || saved || 'ko');
+    buttons.forEach(function (b) { b.addEventListener('click', function () { setLang(b.dataset.set); }); });
+  })();
+</script>
+</body>
+</html>
