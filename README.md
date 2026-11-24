@@ -2,7 +2,7 @@
 
 Khongorzul Battumur(바트투무르 헌거르졸)의 개인 포트폴리오 사이트입니다.
 
-- 사이트: <https://bkhongorzul.github.io/> (영어: <https://bkhongorzul.github.io/?lang=en>)
+- 사이트: <https://bkhongorzul.github.io/> (기본 영어, 한국어로 바로 열기: <https://bkhongorzul.github.io/?lang=ko>)
 - 이력서: [국문 PDF](resume-ko.pdf) · [English PDF](resume-en.pdf)
 
 ## 주요 기능

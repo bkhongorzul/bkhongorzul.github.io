@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ko" data-lang="ko">
+<html lang="en" data-lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -762,7 +762,7 @@
     try { localStorage.setItem('lang', l); } catch (e) {}
   }
   var saved = null; try { saved = localStorage.getItem('lang'); } catch (e) {}
-  setLang(new URLSearchParams(location.search).get('lang') || saved || 'ko');
+  setLang(new URLSearchParams(location.search).get('lang') || saved || 'en');
   langBtns.forEach(function (b) { b.addEventListener('click', function () { setLang(b.dataset.set); }); });
 
   /* header background once scrolled */
