@@ -3,340 +3,735 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Khongorzul | Portfolio</title>
-  <meta name="description" content="Khongorzul Battumur — AI · Frontend Portfolio">
+  <title>Khongorzul Battumur — AI &amp; Frontend</title>
+  <meta name="description" content="Khongorzul Battumur — AI student at Pusan National University, building the interfaces between AI models and people.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Google+Sans+Flex:wght@400..700&family=Roboto+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
+  <script>
+    /* apply saved theme before paint to avoid a flash */
+    (function () {
+      try {
+        var t = localStorage.getItem('theme');
+        if (!t) t = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+        document.documentElement.setAttribute('data-theme', t);
+      } catch (e) {}
+    })();
+  </script>
   <style>
     :root {
-      --navy: #1F3864; --navy-2: #2E5597; --ink: #1d2433; --muted: #5b6478;
-      --line: #e3e7ef; --bg: #f6f8fb; --card: #ffffff; --mark: #fff3bf;
+      --bg: #FAFAF8;
+      --ink: #111318;
+      --soft: rgba(17,19,24,.56);
+      --faint: rgba(17,19,24,.38);
+      --line: rgba(17,19,24,.10);
+      --chip: rgba(17,19,24,.045);
+      --live: #22A36B;
+
+      /* project colours */
+      --c-tradify: #1F9D74;  --t-tradify: #E3F4EC;
+      --c-isia:    #6C4CE0;  --t-isia:    #ECE7FC;
+      --c-biz:     #E2701E;  --t-biz:     #FCEBDD;
+      --c-crypto:  #2B63D9;  --t-crypto:  #E2EBFB;
+      --c-next:    #D23F7A;  --t-next:    #FBE4EE;
+
+      --serif: "Google Sans Flex", "Pretendard", "Apple SD Gothic Neo", system-ui, sans-serif;
+      --sans: "Google Sans Flex", "Pretendard", "Apple SD Gothic Neo", "Malgun Gothic", system-ui, sans-serif;
+      --mono: "Roboto Mono", "Pretendard", ui-monospace, Menlo, monospace;
+    }
+    html[data-theme="dark"] {
+      --bg: #101216;
+      --ink: #ECEDEF;
+      --soft: rgba(236,237,239,.58);
+      --faint: rgba(236,237,239,.38);
+      --line: rgba(236,237,239,.11);
+      --chip: rgba(236,237,239,.06);
+      --t-tradify: #14302A; --t-isia: #241C45; --t-biz: #3A2614; --t-crypto: #172846; --t-next: #3D1828;
     }
     * { box-sizing: border-box; margin: 0; padding: 0; }
     html { scroll-behavior: smooth; }
-    body {
-      font-family: "Pretendard", "Apple SD Gothic Neo", "Malgun Gothic", "Noto Sans KR", system-ui, sans-serif;
-      color: var(--ink); background: var(--bg); line-height: 1.7; font-size: 16px; word-break: keep-all;
-    }
-    a { color: var(--navy-2); text-decoration: none; }
-    a:hover { text-decoration: underline; }
-    .wrap { max-width: 920px; margin: 0 auto; padding: 0 20px; }
+    body { font-family: var(--sans); font-size: 16px; line-height: 1.6; background: var(--bg); color: var(--ink);
+           word-break: keep-all; -webkit-font-smoothing: antialiased; transition: background .3s, color .3s; }
+    a { color: inherit; text-decoration: none; }
+    button { font: inherit; color: inherit; background: none; border: 0; cursor: pointer; }
+    :focus-visible { outline: 2px solid var(--c-crypto); outline-offset: 3px; border-radius: 4px; }
 
-    /* language switch: show only the active language */
     html[data-lang="ko"] [lang="en"]:not(html) { display: none !important; }
     html[data-lang="en"] [lang="ko"]:not(html) { display: none !important; }
+    html[data-lang="ko"] h1, html[data-lang="ko"] h3 { letter-spacing: -.035em; }
 
-    nav { position: sticky; top: 0; z-index: 10; background: rgba(255,255,255,.94);
-          backdrop-filter: blur(6px); border-bottom: 1px solid var(--line); }
-    nav .wrap { display: flex; justify-content: space-between; align-items: center; height: 56px; gap: 16px; }
-    nav .logo { font-weight: 800; color: var(--navy); letter-spacing: -.02em; }
-    nav ul { list-style: none; display: flex; gap: 18px; font-size: 14px; margin-left: auto; }
-    nav ul a { color: var(--muted); }
-    .lang-toggle { display: flex; border: 1px solid var(--line); border-radius: 8px; overflow: hidden; flex-shrink: 0; }
-    .lang-toggle button { border: 0; background: #fff; color: var(--muted); font: inherit; font-size: 13px;
-                          font-weight: 700; padding: 5px 11px; cursor: pointer; }
-    .lang-toggle button.on { background: var(--navy); color: #fff; }
+    /* Korean inside mono labels: no extra letter spacing */
+    .label [lang="ko"], header nav [lang="ko"], .tags [lang="ko"], .toggle [lang="ko"], .panel h4 [lang="ko"], .panel .links [lang="ko"] { letter-spacing: 0; font-family: "Pretendard", var(--sans); }
+    .wrap { max-width: 920px; margin: 0 auto; padding: 0 28px; }
+    .label { font-family: var(--mono); font-size: 12px; letter-spacing: .08em; text-transform: uppercase; color: var(--faint); }
 
-    header.hero { background: var(--navy); color: #fff; padding: 72px 0 64px; }
-    .hero h1 { font-size: 40px; line-height: 1.25; letter-spacing: -.02em; }
-    .hero .sub { display: block; font-size: 18px; font-weight: 400; opacity: .82; margin-top: 8px; }
-    .hero p.lead { margin-top: 20px; max-width: 660px; font-size: 17px; opacity: .93; }
-    .tags { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 20px; }
-    .tags span { border: 1px solid rgba(255,255,255,.35); border-radius: 999px; padding: 3px 12px; font-size: 13px; }
-    .cta { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 28px; }
-    .btn { display: inline-block; padding: 10px 18px; border-radius: 8px; font-weight: 600; font-size: 15px; }
-    .btn.primary { background: #fff; color: var(--navy); }
-    .btn.ghost { border: 1px solid rgba(255,255,255,.5); color: #fff; }
-    .btn:hover { text-decoration: none; opacity: .9; }
+    /* ---------- header ---------- */
+    header { position: sticky; top: 0; z-index: 20; background: transparent; transition: background .3s, box-shadow .3s;
+             backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); }
+    header.scrolled { background: color-mix(in srgb, var(--bg) 45%, transparent); box-shadow: 0 1px 0 var(--line); }
+    header .wrap { display: flex; align-items: center; height: 68px; gap: 26px; }
+    .logo { font-family: var(--mono); font-size: 14px; font-weight: 500; margin-right: auto; letter-spacing: .02em; }
+    .logo span { color: var(--faint); }
+    .logo i { font-style: normal; color: var(--c-tradify); animation: blink 1.1s steps(1) infinite; }
+    @keyframes blink { 50% { opacity: 0; } }
+    header nav { display: flex; gap: 26px; }
+    header nav a, .lang button { font-family: var(--mono); font-size: 12px; letter-spacing: .08em; text-transform: uppercase; color: var(--soft); transition: color .2s; }
+    header nav a:hover, .lang button:hover, .lang button.on { color: var(--ink); }
+    .lang { display: flex; gap: 6px; color: var(--faint); font-size: 12px; }
+    .mode { width: 18px; height: 18px; border-radius: 50%; border: 1.5px solid var(--ink);
+            background: linear-gradient(90deg, var(--ink) 50%, transparent 50%); opacity: .75; transition: transform .4s, opacity .2s; }
+    .mode:hover { opacity: 1; transform: rotate(180deg); }
 
-    section { padding: 56px 0 8px; }
-    h2 { font-size: 24px; color: var(--navy); letter-spacing: -.01em; margin-bottom: 18px;
-         padding-bottom: 8px; border-bottom: 2px solid var(--navy); display: inline-block; }
-    h3 { font-size: 19px; margin-bottom: 4px; }
-    .meta { color: var(--muted); font-size: 14px; margin-bottom: 12px; }
-    .card { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 24px; margin-bottom: 16px; }
-    .card ul { padding-left: 20px; }
-    .card li { margin: 4px 0; }
+    /* ---------- top colour wash (same palette as the closing panel) ---------- */
+    .wash { position: fixed; inset: 0; z-index: -1; pointer-events: none;
+            background: linear-gradient(120deg, var(--t-tradify), var(--t-isia) 38%, var(--t-biz) 72%, var(--t-crypto));
+            opacity: .38; }
+    html[data-theme="dark"] .wash { opacity: .35; }
+    body { position: relative; }
 
-    .featured { border-top: 4px solid var(--navy); }
-    .badge { display: inline-block; background: var(--navy); color: #fff; font-size: 12px; font-weight: 700;
-             border-radius: 4px; padding: 2px 8px; margin-bottom: 8px; }
-    .badge.award { background: #b7791f; }
-    .grid { display: grid; grid-template-columns: 140px 1fr; gap: 14px 20px; margin-top: 16px; }
-    .grid dt { font-weight: 700; color: var(--navy); }
-    .grid dd ul { padding-left: 18px; }
-    .stack { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 10px; }
-    .stack code { background: #eef2f9; color: var(--navy); border-radius: 6px; padding: 2px 8px; font-size: 13px;
-                  font-family: ui-monospace, Consolas, monospace; }
-    .links { display: flex; gap: 14px; flex-wrap: wrap; margin-top: 18px; font-weight: 600; }
-    .two { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
-    .skills dt { font-weight: 700; margin-top: 10px; }
-    .skills dt:first-child { margin-top: 0; }
-    .skills dd { color: var(--muted); }
+    /* ---------- hero ---------- */
+    .hero { padding: 92px 0 56px; }
+    .status { display: inline-flex; align-items: center; gap: 10px; margin-bottom: 30px; }
+    .marks { display: inline-grid; grid-template-columns: repeat(2, 6px); gap: 2px; }
+    .marks i { width: 6px; height: 6px; border-radius: 1.5px; }
+    .marks i:nth-child(1) { background: var(--c-tradify); } .marks i:nth-child(2) { background: var(--c-isia); }
+    .marks i:nth-child(3) { background: var(--c-biz); } .marks i:nth-child(4) { background: var(--c-crypto); }
+    @keyframes ping { 0% { box-shadow: 0 0 0 0 rgba(34,163,107,.45); } 70%,100% { box-shadow: 0 0 0 9px rgba(34,163,107,0); } }
+    
+    .hero h1 { font-family: var(--serif); font-weight: 700; font-size: clamp(34px, 5.4vw, 56px); line-height: 1.1; letter-spacing: -.035em; max-width: 16em; }
+    html[data-lang="ko"] .hero h1 { font-size: clamp(30px, 4.6vw, 48px); line-height: 1.3; max-width: 15em; }
+    .hero p.who { color: var(--ink); font-size: 19px; margin-top: 28px; }
+    .hero p.who + p { margin-top: 10px; }
+    .hero p { color: var(--soft); font-size: 17px; max-width: 37em; margin-top: 26px; }
+    .hero p b { color: var(--ink); font-weight: 500; }
 
-    /* yellow = fill in before publishing */
-    .todo { background: var(--mark); border-radius: 3px; padding: 0 4px; }
+    /* ---------- project list ---------- */
+    .list-head { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 30px; }
+    .list-head a { font-family: var(--mono); font-size: 12px; letter-spacing: .08em; text-transform: uppercase; color: var(--soft); }
+    .list-head a:hover { color: var(--ink); }
+    .projects { position: relative; list-style: none; }
+    .projects::before { content: ""; position: absolute; left: 13px; top: 20px; bottom: 20px; width: 1px; background: var(--line); }
+    .proj { position: relative; padding-left: 52px; margin-bottom: 26px; }
+    .proj .n { position: absolute; left: 0; top: 46px; width: 27px; height: 27px; border-radius: 50%; display: grid; place-items: center;
+               background: var(--bg); border: 1px solid var(--line); font: 500 10.5px var(--mono); color: var(--faint); transition: .25s; }
+    .proj:hover .n, .proj.open .n { border-color: var(--c); color: var(--c); }
 
-    footer { margin-top: 56px; padding: 28px 0; border-top: 1px solid var(--line); color: var(--muted); font-size: 14px; text-align: center; }
+    .row { display: grid; grid-template-columns: 228px minmax(0, 1fr); gap: 30px; align-items: center; width: 100%;
+           text-align: left; padding: 8px; margin: -8px; border-radius: 16px; transition: background .25s; }
+    .row:hover { background: var(--chip); }
+    .thumb { aspect-ratio: 16 / 10.5; border-radius: 12px; background: var(--t); overflow: hidden; position: relative;
+             box-shadow: inset 0 0 0 1px rgba(0,0,0,.04); transition: transform .35s cubic-bezier(.2,.7,.2,1); }
+    .row:hover .thumb { transform: scale(1.025) rotate(-.6deg); }
+    .thumb svg { position: absolute; inset: 0; width: 100%; height: 100%; }
+    .tags { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; margin-bottom: 10px; }
+    .tags .org { font: 500 11px var(--mono); letter-spacing: .08em; text-transform: uppercase; color: var(--c); margin-right: 4px; }
+    .tags .t { font: 11px var(--mono); letter-spacing: .06em; text-transform: uppercase; color: var(--soft);
+               border: 1px solid var(--line); border-radius: 999px; padding: 2px 9px; }
+    .proj h3 { font-family: var(--serif); font-weight: 700; font-size: 24px; line-height: 1.2; letter-spacing: -.025em; }
+    html[data-lang="ko"] .proj h3 { font-size: 23px; }
+    .proj .desc { color: var(--soft); margin-top: 6px; max-width: 34em; }
+    .proj .role { margin-top: 10px; font-size: 14.5px; color: var(--ink); }
+    .proj .role b { font-weight: 600; color: var(--c); margin-right: 6px; }
+    .proj .toggle { display: inline-flex; gap: 8px; align-items: center; margin-top: 16px; padding: 7px 14px 7px 12px;
+                    border-radius: 999px; border: 1px solid color-mix(in srgb, var(--c) 40%, transparent); color: var(--c);
+                    background: var(--t); font-size: 13.5px; font-weight: 600; transition: background .2s, color .2s, border-color .2s; }
+    .proj .toggle i { font-style: normal; display: inline-block; width: 14px; text-align: center; transition: transform .3s; }
+    .row:hover .toggle { background: var(--c); color: #fff; border-color: var(--c); }
+    .proj.open .toggle i { transform: rotate(180deg); }
+    .proj .toggle .close { display: none; }
+    .proj.open .toggle .open-t { display: none; }
+    .proj.open .toggle .close { display: inline; }
+    .award { display: inline-flex; align-items: center; gap: 7px; margin: 0 0 10px; padding: 4px 11px 4px 8px; border-radius: 8px;
+             background: #FFF4D6; color: #8A5A00; font-size: 13px; font-weight: 600; }
+    html[data-theme="dark"] .award { background: #3A2E12; color: #F3C969; }
+    .award.contest { background: var(--t); color: var(--c); }
+    .award svg { width: 15px; height: 15px; flex: none; }
+    .thumb .medal { position: absolute; z-index: 2; top: 10px; left: 10px; width: 28px; height: 28px; border-radius: 50%; background: #F5B83D;
+                    display: grid; place-items: center; box-shadow: 0 2px 6px rgba(0,0,0,.15); }
+    .thumb .medal svg { position: static; width: 16px; height: 16px; }
+
+    .more { display: grid; grid-template-rows: 0fr; transition: grid-template-rows .45s cubic-bezier(.2,.7,.2,1); }
+    .proj.open .more { grid-template-rows: 1fr; }
+    .more > div { overflow: hidden; }
+    .panel { margin: 22px 0 8px calc(228px + 30px); padding: 22px 24px; border-radius: 14px; background: var(--t);
+             border-left: 3px solid var(--c); }
+    .panel .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px 28px; }
+    .panel h4 { font: 500 11px var(--mono); letter-spacing: .08em; text-transform: uppercase; color: var(--c); margin-bottom: 6px; }
+    .panel p, .panel li { font-size: 15px; color: var(--ink); opacity: .86; }
+    .panel ul { padding-left: 17px; }
+    .panel li { margin: 3px 0; }
+    .panel .problem { font-size: 16px; line-height: 1.65; max-width: 48em; margin-bottom: 22px; }
+    .steps { list-style: none; counter-reset: st; display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 8px; margin: 4px 0 22px; }
+    .steps li { counter-increment: st; position: relative; background: color-mix(in srgb, var(--bg) 72%, transparent); border-radius: 10px;
+                padding: 30px 12px 12px; font-size: 13.5px; line-height: 1.45; }
+    .steps li::before { content: counter(st); position: absolute; top: 9px; left: 12px; font: 600 11px var(--mono); color: var(--c); }
+    .panel > .mini span { background: color-mix(in srgb, var(--bg) 72%, transparent); padding: 4px 9px; font-size: 12px; }
+    .built { margin-bottom: 20px; }
+    .built ul { padding-left: 18px; }
+    .built li { margin: 5px 0; }
+    .parts { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; margin: 6px 0 4px; }
+    .part { background: color-mix(in srgb, var(--bg) 72%, transparent); border-radius: 10px; padding: 16px; }
+    .part h5 { font-size: 15px; font-weight: 700; letter-spacing: -.01em; margin-bottom: 6px; }
+    .part p { font-size: 14px !important; line-height: 1.55; }
+    .mini { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 12px; }
+    .mini span { font: 11px var(--mono); padding: 2px 7px; border-radius: 5px; background: var(--t); color: var(--c); }
+    .panel .links { display: flex; gap: 22px; margin-top: 18px; font: 12px var(--mono); letter-spacing: .06em; text-transform: uppercase; }
+    .panel .links a { color: var(--c); border-bottom: 1px solid currentColor; }
+
+    /* project colour scopes */
+    .p-tradify { --c: var(--c-tradify); --t: var(--t-tradify); }
+    .p-isia    { --c: var(--c-isia);    --t: var(--t-isia); }
+    .p-biz     { --c: var(--c-biz);     --t: var(--t-biz); }
+    .p-crypto  { --c: var(--c-crypto);  --t: var(--t-crypto); }
+    .p-next    { --c: var(--c-next);    --t: var(--t-next); }
+
+    /* ---------- awards ---------- */
+    .awards { list-style: none; margin-top: 22px; }
+    .awards li { display: grid; grid-template-columns: 160px minmax(0, 1fr) auto; gap: 24px; align-items: baseline;
+                 padding: 18px 0; border-bottom: 1px solid var(--line); }
+    .awards li:first-child { border-top: 1px solid var(--line); }
+    .awards .when { font: 13px var(--mono); color: var(--faint); }
+    .awards .prize { font-size: 21px; font-weight: 700; letter-spacing: -.02em; line-height: 1.3; }
+    .awards .event { display: block; color: var(--soft); font-size: 15px; margin-top: 2px; }
+    .awards .for { font: 12px var(--mono); letter-spacing: .04em; color: var(--c); background: var(--t); padding: 3px 9px; border-radius: 6px; white-space: nowrap; }
+    .awards .for:hover { filter: brightness(.95); }
+
+    /* ---------- experience / now ---------- */
+    .section { border-top: 1px solid var(--line); margin-top: 48px; padding-top: 34px; }
+    .section.first { margin-top: 0; }
+    #work.section { padding-top: 34px; }
+    #work .list-head { margin-top: 0; }
+    .exp { display: grid; grid-template-columns: 160px minmax(0, 1fr); gap: 24px; padding: 14px 0 0; }
+    .exp:first-of-type { margin-top: 10px; }
+    .chips [lang] { display: inline; }
+    
+    .exp h3 + .sub { color: var(--soft); margin-top: 2px; }
+    .exp ul { list-style: none; margin-top: 12px; color: var(--soft); max-width: 40em; }
+    .edu { display: grid; grid-template-columns: 110px minmax(0, 1fr); gap: 12px 18px; margin-top: 18px; font-size: 15px; }
+    .edu dt { font: 12px var(--mono); letter-spacing: .06em; text-transform: uppercase; color: var(--faint); padding-top: 3px; }
+    .edu dt [lang="ko"] { letter-spacing: 0; font-family: "Pretendard", var(--sans); font-size: 13px; }
+    .edu dd { color: var(--ink); }
+    .inline { color: var(--c-tradify); font-weight: 600; border-bottom: 1px solid currentColor; }
+    .chips { display: flex; flex-wrap: wrap; gap: 6px; }
+    .chips span { font-size: 13.5px; padding: 3px 10px; border-radius: 999px; border: 1px solid var(--line); color: var(--soft); }
+    .chips.small { margin-top: 14px; }
+    .exp li { position: relative; padding-left: 16px; margin: 3px 0; }
+    .exp li::before { content: ""; position: absolute; left: 0; top: .78em; width: 7px; height: 1px; background: var(--faint); }
+    .exp .when { font: 13px var(--mono); color: var(--faint); padding-top: 4px; }
+    .exp h3 { font-family: var(--serif); font-weight: 700; font-size: 21px; line-height: 1.3; letter-spacing: -.02em; }
+    html[data-lang="ko"] .exp h3 { font-size: 20px; }
+    .exp h3 .org { color: var(--soft); font-weight: 500; }
+    .exp p { color: var(--soft); margin-top: 6px; max-width: 36em; }
+    .stack { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 22px; }
+    .stack span { font: 12px var(--mono); padding: 5px 11px; border-radius: 8px; background: var(--chip); color: var(--soft); }
+    .now p { font-size: 18px; line-height: 1.65; max-width: 38em; margin-top: 16px; }
+    .now a { display: inline-block; margin-top: 18px; font: 12px var(--mono); letter-spacing: .06em; text-transform: uppercase; color: var(--soft); border-bottom: 1px solid var(--line); }
+    .now a:hover { color: var(--ink); }
+
+    .skills { margin-top: 20px; display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 22px; }
+    .skcol h4 { font-size: 13px; font-weight: 600; color: var(--soft); padding-bottom: 10px; margin-bottom: 10px; border-bottom: 1px solid var(--line); }
+    .skcol ul { list-style: none; }
+    .skcol li { font-size: 16px; font-weight: 500; letter-spacing: -.01em; line-height: 1.9; }
+    .skcol em { font-style: normal; font-weight: 400; color: var(--faint); font-size: 14px; margin-left: 4px; }
+
+    .thanks { margin-top: 64px; padding: 48px 40px; border-radius: 20px; text-align: center;
+              background: color-mix(in srgb, var(--bg) 60%, transparent); border: 1px solid color-mix(in srgb, var(--bg) 80%, transparent);
+              backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); }
+    .thanks h2 { font-size: clamp(28px, 4.4vw, 42px); font-weight: 700; letter-spacing: -.035em; line-height: 1.15; }
+    .thanks p { color: var(--soft); margin: 12px auto 26px; max-width: 32em; }
+    .thanks .cta { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; }
+    .btn { display: inline-flex; align-items: center; padding: 10px 18px; border-radius: 999px; font-size: 14.5px; font-weight: 600;
+           background: var(--bg); border: 1px solid var(--line); transition: transform .2s; }
+    .btn:hover { transform: translateY(-2px); }
+    .btn.dark { background: var(--ink); color: var(--bg); border-color: var(--ink); }
+
+    footer { border-top: 1px solid var(--line); margin-top: 64px; }
+    footer .wrap { display: flex; align-items: center; gap: 18px; height: 84px; font: 12px var(--mono); color: var(--faint); }
+    footer .sep { margin-right: auto; }
+    footer a { color: var(--soft); transition: color .2s; display: inline-flex; }
+    footer a:hover { color: var(--ink); }
+    footer svg { width: 17px; height: 17px; }
+
+    .todo { background: #FFF0A3 !important; color: #6b5300 !important; border-radius: 3px; padding: 0 4px; }
+
+    /* page-load: one staggered entrance */
+    .enter { animation: enter .9s cubic-bezier(.2,.7,.2,1) both; }
+    .d1 { animation-delay: .08s; } .d2 { animation-delay: .18s; } .d3 { animation-delay: .3s; }
+    @keyframes enter { from { opacity: 0; transform: translateY(14px); } }
 
     @media (max-width: 760px) {
-      nav ul { display: none; }
-      .hero h1 { font-size: 30px; }
-      .grid { grid-template-columns: 1fr; gap: 4px; }
-      .grid dd { margin-bottom: 10px; }
-      .two { grid-template-columns: 1fr; }
+      header nav { display: none; }
+      .hero { padding: 60px 0 60px; }
+      .row { grid-template-columns: 1fr; gap: 16px; }
+      .panel { margin-left: 0; }
+      .panel .grid { grid-template-columns: 1fr; }
+      .proj .n { top: 8px; }
+      .exp { grid-template-columns: 1fr; gap: 6px; }
+      .edu { grid-template-columns: 1fr; gap: 2px; }
+      .skills { grid-template-columns: 1fr 1fr; }
+      .thanks { padding: 36px 22px; }
+      .edu dd { margin-bottom: 10px; }
+      .parts { grid-template-columns: 1fr; }
+            footer .wrap { flex-wrap: wrap; height: auto; padding: 24px 28px; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { animation: none !important; transition: none !important; }
     }
   </style>
 </head>
 <body>
+<div class="wash" aria-hidden="true"></div>
 
-<nav>
+<header>
   <div class="wrap">
-    <a class="logo" href="#">Khongorzul</a>
-    <ul>
-      <li><a href="#about"><span lang="ko">소개</span><span lang="en">About</span></a></li>
-      <li><a href="#project"><span lang="ko">대표 프로젝트</span><span lang="en">Featured</span></a></li>
-      <li><a href="#others"><span lang="ko">프로젝트</span><span lang="en">Projects</span></a></li>
-      <li><a href="#experience"><span lang="ko">경험</span><span lang="en">Experience</span></a></li>
-      <li><a href="#skills"><span lang="ko">기술</span><span lang="en">Skills</span></a></li>
-    </ul>
-    <div class="lang-toggle" role="group" aria-label="Language">
-      <button type="button" data-set="ko">KO</button>
-      <button type="button" data-set="en">EN</button>
+    <a class="logo" href="#">KB<i>_</i><span>bkhongorzul</span></a>
+    <nav aria-label="Sections">
+      <a href="#education"><span lang="ko">학력</span><span lang="en">Education</span></a>
+      <a href="#experience"><span lang="ko">경력</span><span lang="en">Experience</span></a>
+      <a href="#work"><span lang="ko">프로젝트</span><span lang="en">Work</span></a>
+      <a href="resume-ko.pdf" download lang="ko">이력서</a>
+      <a href="resume-en.pdf" download lang="en">Resume</a>
+    </nav>
+    <div class="lang" role="group" aria-label="Language">
+      <button type="button" data-set="ko">KO</button><span>/</span><button type="button" data-set="en">EN</button>
     </div>
-  </div>
-</nav>
-
-<header class="hero">
-  <div class="wrap">
-    <h1>
-      <span lang="ko">안녕하세요, Khongorzul입니다.</span>
-      <span lang="en">Hi, I'm Khongorzul.</span>
-      <span class="sub" lang="ko">바트투무르 헌거르졸 · 부산대학교 정보컴퓨터공학부 인공지능전공 · 2027년 2월 졸업 예정</span>
-      <span class="sub" lang="en">Khongorzul Battumur · AI major, Pusan National University · Graduating Feb 2027</span>
-    </h1>
-    <p class="lead" lang="ko">
-      실용적인 AI 시스템으로 실제 사용자의 문제를 해결하는 일에 관심이 있습니다.
-      여러 프로젝트와 해커톤에서 AI 기반 웹 서비스를 기획부터 완성까지 만들어 왔으며,
-      한국어·영어·몽골어를 사용합니다.
-    </p>
-    <p class="lead" lang="en">
-      I'm interested in where practical AI systems meet real user problems.
-      I've built and shipped AI-powered web applications across several projects and hackathons,
-      and I work in Korean, English and Mongolian.
-    </p>
-    <div class="tags">
-      <span>AI Agents · LLM</span><span>Frontend · UI/UX</span><span>Data Visualization</span>
-    </div>
-    <div class="cta">
-      <a class="btn primary" href="resume-ko.pdf" download lang="ko">이력서 PDF (국문)</a>
-      <a class="btn primary" href="resume-en.pdf" download lang="en">Resume PDF (English)</a>
-      <a class="btn ghost" href="resume-en.pdf" download lang="ko">English Resume</a>
-      <a class="btn ghost" href="resume-ko.pdf" download lang="en">국문 이력서</a>
-      <a class="btn ghost" href="https://github.com/bkhongorzul" target="_blank" rel="noopener">GitHub</a>
-      <a class="btn ghost" href="mailto:khongorzul.batt@gmail.com">Email</a>
-    </div>
+    <button class="mode" id="mode" type="button" aria-label="Toggle dark mode"></button>
   </div>
 </header>
 
 <main class="wrap">
 
-  <!-- ===================== ABOUT ===================== -->
-  <section id="about">
-    <h2><span lang="ko">소개</span><span lang="en">About</span></h2>
-    <div class="card">
-      <ul lang="ko">
-        <li><b>관심 분야</b> — AI 에이전트·LLM을 활용한 서비스, 그리고 그 결과를 보여주는 프론트엔드</li>
-        <li><b>강점</b> — 아이디어 구상부터 화면 구현, 배포까지 혼자서도 끝까지 완성해 본 경험</li>
-        <li><b>언어</b> — 몽골어(모국어), 한국어(TOPIK 6급), 영어(IELTS 7.0)</li>
-        <li><b>학력</b> — 부산대학교 정보컴퓨터공학부 인공지능전공 (2023.03 – 2027.02 예정), 정부초청장학생(GKS)</li>
-      </ul>
-      <ul lang="en">
-        <li><b>Interests</b> — services built on AI agents and LLMs, and the frontends that present their results</li>
-        <li><b>Strength</b> — taking projects end to end, from the idea through the UI to a working deployment</li>
-        <li><b>Languages</b> — Mongolian (native), Korean (TOPIK 6), English (IELTS 7.0)</li>
-        <li><b>Education</b> — B.S. Computer Science and Engineering (AI major), Pusan National University, Mar 2023 – Feb 2027; Korean Government Scholarship (GKS)</li>
-      </ul>
+  <!-- ===================== HERO ===================== -->
+  <section class="hero">
+    <div class="status enter">
+      <span class="marks" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
+      <span class="label">
+        <span lang="ko">부산, 2027년 2월 졸업 예정</span>
+        <span lang="en">Busan, graduating Feb 2027</span>
+      </span>
     </div>
+    <h1 class="enter d1">
+      <span lang="ko">AI로 우리가 무엇을 더 만들 수 있는지,<br>그 가능성이 궁금합니다.</span>
+      <span lang="en">I'm curious how far AI can stretch what we're able to build.</span>
+    </h1>
+    <p class="who enter d2" lang="ko">안녕하세요, 부산대학교 인공지능전공 4학년 바트투무르 헌거르졸입니다.</p>
+    <p class="enter d2" lang="ko">모델이 할 수 있는 일을 실제로 사람이 쓰는 서비스로 만드는 과정을 좋아합니다. 데이터를 다루는 백엔드부터 결과를 보여주는 화면까지 직접 만들어 봅니다.</p>
+    <p class="who enter d2" lang="en">I'm Khongorzul Battumur, a fourth-year AI student at Pusan National University.</p>
+    <p class="enter d2" lang="en">I like taking what a model can do and turning it into something people actually use, building everything from the data pipeline to the screen.</p>
   </section>
 
-  <!-- ===================== FEATURED: TRADIFY ===================== -->
-  <section id="project">
-    <h2><span lang="ko">대표 프로젝트</span><span lang="en">Featured Project</span></h2>
-    <article class="card featured">
-      <span class="badge"><span lang="ko">졸업과제 · 2026</span><span lang="en">Graduation Project · 2026</span></span>
-      <h3>Tradify — <span lang="ko">실시간 AI 기반 주식 거래 시스템</span><span lang="en">Real-Time AI Stock Trading System</span></h3>
-      <p class="meta">
-        <span lang="ko">팀 AI Got This (팀번호 31) · 부산대학교 정보컴퓨터공학부 2026 졸업과제</span>
-        <span lang="en">Team “AI Got This” (#31) · PNU Computer Science and Engineering capstone, 2026</span>
-      </p>
-
-      <dl class="grid">
-        <dt><span lang="ko">문제 정의</span><span lang="en">Problem</span></dt>
-        <dd>
-          <span lang="ko">개인 투자자는 실시간으로 쏟아지는 시세 데이터를 직접 해석하고 매매 시점을 판단하기 어렵습니다.
-          Tradify는 AI 예측 결과와 거래 전략을 결합해, 매매 판단에 필요한 정보를 한 화면에서 실시간으로 제공합니다.</span>
-          <span lang="en">Individual investors struggle to read a constant stream of live market data and decide when to trade.
-          Tradify combines AI price predictions with a trading strategy and shows the information needed for a decision on one live screen.</span>
-        </dd>
-
-        <dt><span lang="ko">나의 역할</span><span lang="en">My Role</span></dt>
-        <dd>
-          <ul lang="ko">
-            <li><b>Prediction Service</b> — 주가 예측 모델의 결과를 서비스에서 쓸 수 있도록 제공</li>
-            <li><b>Strategy &amp; Decision Engine</b> — 예측 결과를 바탕으로 매수·매도·보유를 판단하는 로직</li>
-            <li><b>프론트엔드 전체</b> — 대시보드, 차트, 거래 화면 등 모든 사용자 화면 설계·구현</li>
-          </ul>
-          <ul lang="en">
-            <li><b>Prediction Service</b> — served the price-prediction model's output to the rest of the system</li>
-            <li><b>Strategy &amp; Decision Engine</b> — logic that turns predictions into buy / sell / hold decisions</li>
-            <li><b>Entire frontend</b> — designed and built every user-facing screen: dashboard, charts, trading views</li>
-          </ul>
-        </dd>
-
-        <dt><span lang="ko">기술</span><span lang="en">Tech</span></dt>
-        <dd>
-          <!-- TODO: 실제로 사용한 기술만 남기세요 / keep only tech you actually used -->
-          <div class="stack" style="margin-top:0">
-            <code class="todo">Frontend framework</code>
-            <code class="todo">Prediction model / library</code>
-            <code class="todo">Backend / real-time</code>
-          </div>
-        </dd>
-
-        <dt><span lang="ko">결과</span><span lang="en">Results</span></dt>
-        <dd>
-          <ul lang="ko">
-            <li>실시간 시세 → AI 예측 → 전략 판단 → 화면 표시로 이어지는 전체 흐름 구현</li>
-            <li>2026 부산대학교 졸업과제 발표회에서 포스터 발표</li>
-            <li><span class="todo">테스트 리포트의 실측 수치 1~2개 (예: 예측 정확도, 응답 지연 시간)</span></li>
-          </ul>
-          <ul lang="en">
-            <li>Implemented the full flow: live prices → AI prediction → strategy decision → on-screen display</li>
-            <li>Presented as a poster at the 2026 PNU graduation project symposium</li>
-            <li><span class="todo">1–2 measured numbers from the test report (e.g., prediction accuracy, latency)</span></li>
-          </ul>
-        </dd>
-
-        <dt><span lang="ko">배운 점</span><span lang="en">Takeaway</span></dt>
-        <dd>
-          <span lang="ko">예측값이 좋아도 사용자가 그 의미를 이해하지 못하면 쓸 수 없다는 것을 배웠습니다.
-          그래서 예측 결과와 판단 근거를 함께 보여주는 화면 구성에 가장 많은 시간을 썼습니다.</span>
-          <span lang="en">A good prediction is useless if the user can't understand what it means.
-          That's why I spent the most time designing screens that show each prediction together with the reasoning behind the decision.</span>
-        </dd>
-      </dl>
-
-      <div class="links">
-        <!-- TODO: 실제 주소로 바꾸세요 / replace with real links -->
-        <a class="todo" href="#" target="_blank" rel="noopener"><span lang="ko">▶ 데모 / 시연 영상</span><span lang="en">▶ Demo video</span></a>
-        <a class="todo" href="https://github.com/bkhongorzul" target="_blank" rel="noopener"><span lang="ko">⌘ 소스 코드</span><span lang="en">⌘ Source code</span></a>
+  <!-- ===================== EDUCATION ===================== -->
+  <section class="section first" id="education">
+    <span class="label"><span lang="ko">학력</span><span lang="en">Education</span></span>
+    <div class="exp">
+      <span class="when">2023.03 – 2027.02</span>
+      <div>
+        <h3><span lang="ko">부산대학교</span><span lang="en">Pusan National University</span></h3>
+        <p class="sub" lang="ko">정보컴퓨터공학부 인공지능전공 학사 · 2027년 2월 졸업 예정</p>
+        <p class="sub" lang="en">B.S. Computer Science &amp; Engineering, AI major · Graduating Feb 2027</p>
+        <dl class="edu">
+          <dt><span lang="ko">장학</span><span lang="en">Scholarship</span></dt>
+          <dd><span lang="ko">정부초청장학생 (GKS)</span><span lang="en">Korean Government Scholarship (GKS)</span></dd>
+          <dt><span lang="ko">졸업과제</span><span lang="en">Capstone</span></dt>
+          <dd><a href="#tradify" class="inline">Tradify</a><span lang="ko">, 실시간 AI 주식 거래 시스템</span><span lang="en">, a real-time AI stock trading system</span></dd>
+        </dl>
       </div>
-    </article>
-  </section>
-
-  <!-- ===================== OTHER PROJECTS ===================== -->
-  <section id="others">
-    <h2><span lang="ko">프로젝트 · 수상</span><span lang="en">Projects &amp; Awards</span></h2>
-    <div class="two">
-
-      <article class="card">
-        <span class="badge award"><span lang="ko">장려상 · 4위</span><span lang="en">Encouragement Award · 4th</span></span>
-        <h3>ISIA — <span lang="ko">AI 프로젝트 평가 시스템</span><span lang="en">AI Project Evaluation System</span></h3>
-        <p class="meta">Upstage PNU AI Agent Hackathon · 2025.11</p>
-        <ul lang="ko">
-          <li>프로젝트나 사업 아이디어를 제출하면 기술 실현 가능성, 시장성, 리스크를 분석해 종합 점수와 등급이 담긴 <b>AI 평가 보고서</b>를 돌려주는 웹 도구</li>
-          <li>아이디어 기획과 전체 구현 담당: 입력 폼, 병렬로 동작하는 AI 에이전트 3개, 등급·점수·요약을 보여주는 결과 화면</li>
-          <li>실제 제출물로 테스트</li>
-        </ul>
-        <ul lang="en">
-          <li>A web tool that takes a project or business idea and returns a full <b>AI evaluation report</b> on technical viability, market potential and risk, with an overall score and grade</li>
-          <li>Came up with the idea and built it end to end: intake form, three AI agents running in parallel, and a results page with grade, score and summary</li>
-          <li>Tested with real submissions</li>
-        </ul>
-        <div class="stack"><code>Upstage Solar LLM</code><code>n8n</code><code>Multi-agent</code></div>
-      </article>
-
-      <article class="card">
-        <span class="badge award"><span lang="ko">3위</span><span lang="en">3rd Place</span></span>
-        <h3>BizVision — <span lang="ko">상권 입지 분석 플랫폼</span><span lang="en">Business Location Intelligence</span></h3>
-        <p class="meta">PNU Tech Week · 2025.09</p>
-        <ul lang="ko">
-          <li>창업 예정자가 지역과 업종(예: 특정 동네의 카페)을 고르면 유동인구, 주변 경쟁 업체, 상권 추이를 바탕으로 사업성을 알려주는 플랫폼</li>
-          <li>실제 지도 데이터와 수년간의 공공 상권 데이터를 결합</li>
-          <li>React로 프론트엔드와 인터랙티브 대시보드 구현 (지도·위치, 내비게이션, 데이터 그래프)</li>
-        </ul>
-        <ul lang="en">
-          <li>Pick a location and a business type (e.g., a café in a specific district) and the platform rates its viability from foot traffic, nearby competitors and area trends</li>
-          <li>Combined real map data with years of government commercial-district data</li>
-          <li>Built the frontend in React with an interactive dashboard (map/location, navigation, data graphs)</li>
-        </ul>
-        <div class="stack"><code>React</code><code>Map API</code><code>Public data</code></div>
-      </article>
-
-      <article class="card">
-        <span class="badge"><span lang="ko">리드 개발자</span><span lang="en">Lead Developer</span></span>
-        <h3>CryptoLens — <span lang="ko">암호화폐 감성 분석 도구</span><span lang="en">Crypto Sentiment Analysis</span></h3>
-        <ul lang="ko">
-          <li>여러 암호화폐 뉴스 소스를 한 번에 분석해 시장 분위기가 <b>강세·약세·혼조</b> 중 어디인지 판단</li>
-          <li>주류 언론과 개인 투자자 커뮤니티의 의견이 엇갈릴 때 이를 표시</li>
-          <li>30초 이내에 점수가 매겨진 분석 보고서를 생성</li>
-        </ul>
-        <ul lang="en">
-          <li>Scans many crypto news sources at once and tells you whether overall sentiment is <b>bullish, bearish or split</b></li>
-          <li>Flags when mainstream media and retail communities are saying different things</li>
-          <li>Produces a scored breakdown report in under 30 seconds</li>
-        </ul>
-        <div class="stack"><code>LLM</code><code>Sentiment Analysis</code><code>Divergence detection</code></div>
-      </article>
-
     </div>
   </section>
 
   <!-- ===================== EXPERIENCE ===================== -->
-  <section id="experience">
-    <h2><span lang="ko">경험</span><span lang="en">Experience</span></h2>
-    <div class="card">
-      <h3><span lang="ko">지니에듀테크(주) — 프론트엔드 인턴</span><span lang="en">Genie Edutech Co., Ltd. — Frontend Intern</span></h3>
-      <p class="meta">2026.07 – 2026.08</p>
-      <ul lang="ko">
-        <li>회사 홈페이지 UI/UX 리뉴얼 및 프론트엔드 구현</li>
-        <li>신규 사업 부문 홈페이지를 처음부터 제작</li>
-      </ul>
-      <ul lang="en">
-        <li>Redesigned the company homepage UI/UX and implemented the renewed frontend</li>
-        <li>Built a new homepage for a separate business line from scratch</li>
-      </ul>
-    </div>
-    <div class="card">
-      <h3><span lang="ko">몽골 온라인 뉴스 매체 — 번역·기사 작성 (원격)</span><span lang="en">Mongolian Online News — Translator &amp; Writer (Remote)</span></h3>
-      <p class="meta"><span lang="ko">2024 – 현재</span><span lang="en">2024 – Present</span></p>
-      <ul lang="ko"><li>영어·한국어 뉴스를 몽골어로 번역해 기사로 작성, 학업과 병행</li></ul>
-      <ul lang="en"><li>Translate and write news articles from English and Korean into Mongolian alongside a full course load</li></ul>
-    </div>
-    <div class="card">
-      <h3><span lang="ko">GKS 신입생 멘토 — 부산대학교</span><span lang="en">GKS Student Mentor — Pusan National University</span></h3>
-      <p class="meta">2024.09 – 2025.02</p>
-      <ul lang="ko"><li>새로 입국한 GKS 장학생의 학적 등록부터 행정 절차, 캠퍼스 생활 적응까지 지원</li></ul>
-      <ul lang="en"><li>Helped newly arrived GKS students with university enrollment, admin paperwork and settling into campus life</li></ul>
-    </div>
-    <div class="card">
-      <h3><span lang="ko">영어 강사 — 몽골 울란바토르</span><span lang="en">English Tutor — Ulaanbaatar, Mongolia</span></h3>
-      <p class="meta">2022.06 – 2022.08</p>
-      <ul lang="ko"><li>개인 및 소그룹 대상 영어 회화·시험 대비 수업</li></ul>
-      <ul lang="en"><li>Taught individuals and small groups, focusing on conversation skills and exam preparation</li></ul>
+  <section class="section" id="experience">
+    <span class="label"><span lang="ko">경력</span><span lang="en">Experience</span></span>
+    <div class="exp">
+      <span class="when">2026.07 – 2026.08</span>
+      <div>
+        <h3><span lang="ko">지니에듀테크</span><span lang="en">Genie Edutech</span></h3>
+        <p class="sub" lang="ko">풀스택 개발 인턴</p>
+        <p class="sub" lang="en">Full-stack developer intern</p>
+        <ul lang="ko">
+          <li>회사 대표 홈페이지 리뉴얼: UI/UX 설계부터 프론트엔드, 백엔드까지 전부 직접 구현</li>
+          <li>신규 사업 부문 웹사이트를 처음부터 디자인하고 풀스택으로 개발</li>
+        </ul>
+        <ul lang="en">
+          <li>Renewed the company's main homepage end to end, from UI/UX design to the frontend and backend</li>
+          <li>Designed and built a full-stack website for a new business line from scratch</li>
+        </ul>
+        <div class="chips small">
+          <span lang="ko">UI/UX 디자인</span><span lang="en">UI/UX design</span><span lang="ko">프론트엔드</span><span lang="en">Frontend</span><span lang="ko">백엔드</span><span lang="en">Backend</span>
+        </div>
+      </div>
     </div>
   </section>
 
+  <!-- ===================== WORK ===================== -->
+  <section id="work" class="section">
+    <div class="list-head">
+      <span class="label"><span lang="ko">프로젝트</span><span lang="en">Selected work</span></span>
+      <a href="https://github.com/bkhongorzul" target="_blank" rel="noopener">GitHub ↗</a>
+    </div>
+
+    <ol class="projects">
+
+      <!-- TRADIFY -->
+      <li class="proj p-tradify open" id="tradify">
+        <span class="n">01</span>
+        <button class="row" type="button" aria-expanded="true">
+          <div class="thumb" aria-hidden="true">
+            <svg viewBox="0 0 228 150" preserveAspectRatio="xMidYMid slice">
+              <rect x="16" y="16" width="196" height="118" rx="8" fill="#fff" opacity=".92"/>
+              <rect x="26" y="26" width="48" height="6" rx="3" fill="#1F9D74" opacity=".5"/>
+              <rect x="166" y="24" width="36" height="12" rx="6" fill="#1F9D74"/>
+              <text x="184" y="33" text-anchor="middle" font-family="Roboto Mono, monospace" font-size="7" fill="#fff">BUY</text>
+              <path d="M26 112 L48 100 L66 104 L86 84 L104 90 L124 70 L142 76 L162 56 L182 60 L202 44" fill="none" stroke="#1F9D74" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M26 112 L48 100 L66 104 L86 84 L104 90 L124 70 L142 76 L162 56 L182 60 L202 44 L202 124 L26 124 Z" fill="#1F9D74" opacity=".10"/>
+              <path d="M162 56 L182 52 L202 38" fill="none" stroke="#1F9D74" stroke-width="2" stroke-dasharray="3 3" opacity=".6"/>
+              <circle cx="202" cy="44" r="3.5" fill="#1F9D74"/>
+            </svg>
+          </div>
+          <div>
+            <div class="tags">
+              <span class="org"><span lang="ko">졸업과제</span><span lang="en">Capstone</span></span>
+              <span class="t">Python</span><span class="t">FinBERT</span><span class="t">React</span>
+            </div>
+            <h3>Tradify</h3>
+            <p class="desc">
+              <span lang="ko">실시간 시세와 뉴스 감성을 분석해 스스로 매매를 결정하고 주문까지 내는 AI 주식 거래 시스템.</span>
+              <span lang="en">An AI trading system that reads live prices and news sentiment, decides what to trade, and places the orders itself.</span>
+            </p>
+            <p class="role"><b><span lang="ko">맡은 일</span><span lang="en">My part</span></b><span lang="ko">AI 예측 서비스, 거래 전략 엔진, 프론트엔드 대시보드</span><span lang="en">AI prediction service, trading strategy engine, frontend dashboard</span></p>
+            <span class="toggle"><i>↓</i><span class="open-t"><span lang="ko">자세히 보기</span><span lang="en">See details</span></span><span class="close"><span lang="ko">접기</span><span lang="en">Close</span></span></span>
+          </div>
+        </button>
+        <div class="more"><div>
+          <div class="panel">
+            <p class="problem" lang="ko">개인 투자자는 쏟아지는 시세와 뉴스를 제때 읽고 매매 판단을 내리기 어렵습니다. Tradify는 시세와 뉴스를 실시간으로 함께 분석해 무엇을 거래할지 결정하고, 실제 주문까지 이어지는 전 과정을 대시보드로 보여줍니다. 저는 이 의사결정 파이프라인의 세 부분을 모두 만들었습니다.</p>
+            <p class="problem" lang="en">Individual investors can't read live prices and breaking news fast enough to act on them. Tradify analyses both in real time, decides what to trade, turns that into an actual order, and shows the whole process on a live dashboard. I built all three parts of that decision pipeline.</p>
+            <h4><span lang="ko">작동 방식</span><span lang="en">How it works</span></h4>
+            <ol class="steps">
+              <li><span lang="ko">5분 시세와 금융 뉴스 수집</span><span lang="en">5-minute prices and financial news come in</span></li>
+              <li><span lang="ko">FinBERT 감성 점수, 시간 감쇠 적용</span><span lang="en">FinBERT scores the news, weighted by recency</span></li>
+              <li><span lang="ko">전략 엔진이 현금·비중·한도 확인</span><span lang="en">Strategy engine checks cash, allocation and limits</span></li>
+              <li><span lang="ko">RabbitMQ로 주문 전달</span><span lang="en">Orders published through RabbitMQ</span></li>
+              <li><span lang="ko">대시보드에 실시간 표시</span><span lang="en">Results shown live on the dashboard</span></li>
+            </ol>
+            <h4><span lang="ko">내가 만든 것</span><span lang="en">What I built</span></h4>
+            <div class="parts">
+              <div class="part">
+                <h5><span lang="ko">AI 예측 서비스</span><span lang="en">AI prediction service</span></h5>
+                <p lang="ko">5분 단위 시세(OHLCV)를 처리하고, FinBERT로 금융 뉴스를 긍정·부정·중립 확률로 분류해 점수화합니다. 지수 시간 감쇠 w(t) = e<sup>−λt</sup>로 새 뉴스에는 100% 가중치를, 오래된 뉴스에는 점점 낮은 가중치를 줍니다.</p>
+                <p lang="en">Processes 5-minute price bars (OHLCV) and classifies incoming financial news with FinBERT into positive, negative and neutral probabilities. An exponential time decay, w(t) = e<sup>−λt</sup>, gives fresh news full weight and fades older news so it can't distort current trades.</p>
+                <div class="mini"><span>Python</span><span>FinBERT</span><span>OHLCV</span></div>
+              </div>
+              <div class="part">
+                <h5><span lang="ko">거래 전략 엔진</span><span lang="en">Trading strategy engine</span></h5>
+                <p lang="ko">예측을 그대로 매수하지 않고 안전한 주문으로 바꿉니다. 가용 현금과 총자산을 확인하고, 종목별 목표 비중과 포지션 크기 한도를 적용한 뒤 확정된 주문을 RabbitMQ 실행 큐로 보냅니다.</p>
+                <p lang="en">Instead of blindly buying on a signal, it checks available cash and total equity, applies per-stock target allocations and position-size limits, then publishes the final orders to a RabbitMQ execution queue.</p>
+                <div class="mini"><span>Python</span><span>RabbitMQ</span></div>
+              </div>
+              <div class="part">
+                <h5><span lang="ko">프론트엔드 대시보드</span><span lang="en">Frontend dashboard</span></h5>
+                <p lang="ko">거래 봇을 실시간으로 보여주는 반응형 웹 앱. 가용 현금, 순자산, 미실현 손익, 정렬·필터 가능한 포지션 표, Alpaca 브로커 연결 상태, 라이트·다크 모드를 구현했습니다.</p>
+                <p lang="en">A responsive web app that shows the trading bot live: available cash, net equity and unrealized P&amp;L, sortable and filterable position tables, Alpaca broker status, and light/dark mode.</p>
+                <div class="mini"><span>React</span><span>TypeScript</span><span>Tailwind</span><span>Vercel</span></div>
+              </div>
+            </div>
+          </div>
+        </div></div>
+      </li>
+
+      <!-- NEXTSPOT -->
+      <li class="proj p-next" id="nextspot">
+        <span class="n">02</span>
+        <button class="row" type="button" aria-expanded="false">
+          <div class="thumb" aria-hidden="true">
+            <svg viewBox="0 0 228 150" preserveAspectRatio="xMidYMid slice">
+              <g stroke="#D23F7A" stroke-width="2" opacity=".35"><path d="M24 34 V116 M84 34 V116 M144 34 V116 M204 34 V116"/></g>
+              <rect x="96" y="44" width="36" height="58" rx="4" fill="none" stroke="#D23F7A" stroke-width="2" stroke-dasharray="4 4"/>
+              <text x="114" y="80" text-anchor="middle" font-family="Google Sans Flex, sans-serif" font-weight="700" font-size="20" fill="#D23F7A">P</text>
+              <rect x="36" y="48" width="34" height="52" rx="9" fill="#D23F7A" opacity=".55"/>
+              <rect x="41" y="56" width="24" height="12" rx="3" fill="#fff" opacity=".75"/>
+              <rect x="158" y="48" width="34" height="52" rx="9" fill="#D23F7A"/>
+              <rect x="163" y="56" width="24" height="12" rx="3" fill="#fff" opacity=".85"/>
+              <path d="M70 128 C96 140 132 140 158 128" fill="none" stroke="#D23F7A" stroke-width="2" stroke-linecap="round"/>
+              <path d="M150 122 L158 128 L149 133" fill="none" stroke="#D23F7A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </div>
+          <div>
+            <div class="tags">
+              <span class="org"><span lang="ko">공모전</span><span lang="en">Contest</span></span>
+              <span class="t">Kotlin</span><span class="t">Pleos SDK</span><span class="t">Firestore</span>
+            </div>
+            <div class="award contest"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 17h14l-1.5-6.5A2 2 0 0 0 15.6 9H8.4a2 2 0 0 0-1.9 1.5Z"/><circle cx="8" cy="17" r="2"/><circle cx="16" cy="17" r="2"/></svg><span lang="ko">현대자동차그룹 차량용 앱 개발 공모전 2026</span><span lang="en">Hyundai Motor Group In-Car App Contest 2026</span></div>
+            <h3>NextSpot</h3>
+            <p class="desc">
+              <span lang="ko">차가 자기 센서로 출발을 감지하고, 근처에서 자리를 찾는 차에게 주차 자리를 직접 넘겨주는 차량용 앱.</span>
+              <span lang="en">An in-car app where the car senses that it's about to leave and hands its parking spot straight to a nearby car that's looking.</span>
+            </p>
+            <p class="role"><b><span lang="ko">맡은 일</span><span lang="en">My part</span></b><span lang="ko">아이디어, 출발 감지 로직, 백엔드</span><span lang="en">The idea, departure-detection logic and backend</span></p>
+            <span class="toggle"><i>↓</i><span class="open-t"><span lang="ko">자세히 보기</span><span lang="en">See details</span></span><span class="close"><span lang="ko">접기</span><span lang="en">Close</span></span></span>
+          </div>
+        </button>
+        <div class="more"><div>
+          <div class="panel">
+            <p class="problem" lang="ko">지금의 주차 안내는 주차장에 설치된 센서나 CCTV에 의존하고, 그마저도 남은 자리 수만 알려줄 뿐 곧 비는 자리는 알지 못합니다. NextSpot은 차가 이미 가진 신호를 씁니다. 운전자가 안전벨트를 매고 내비 목적지를 설정하면 차가 스스로 곧 떠난다는 것을 알아차리고, 근처에서 자리를 찾는 차에게 음성으로 그 자리를 넘겨줍니다. 주차장에 별도 설비가 필요 없습니다.</p>
+            <p class="problem" lang="en">Today's parking guidance relies on sensors or cameras installed in the lot, and even then it only counts empty spaces. It can't tell you which spot is about to open up. NextSpot uses signals every car already has: when a driver buckles up and sets a destination, the car itself knows it's about to leave and hands its spot, by voice, to a nearby car that's looking. No equipment in the parking lot needed.</p>
+            <h4><span lang="ko">작동 방식</span><span lang="en">How it works</span></h4>
+            <ol class="steps">
+              <li><span lang="ko">문·안전벨트와 내비 설정으로 곧 비는 자리 등록</span><span lang="en">Door or seatbelt plus navigation set: spot marked "leaving soon"</span></li>
+              <li><span lang="ko">500m 안의 찾는 차에게 음성 제안</span><span lang="en">A car looking within 500 m gets a voice offer</span></li>
+              <li><span lang="ko">"네" 한마디로 내비가 그 자리로</span><span lang="en">Driver says "Yes" and navigation reroutes to the spot</span></li>
+              <li><span lang="ko">주차 브레이크 해제로 출발 확정</span><span lang="en">Parking brake release confirms the departure</span></li>
+              <li><span lang="ko">주차 완료, 넘겨준 차에 크레딧</span><span lang="en">Spot taken, and the leaving car earns a credit</span></li>
+            </ol>
+            <div class="built">
+              <h4><span lang="ko">내가 만든 것</span><span lang="en">What I built</span></h4>
+              <ul lang="ko">
+                <li>아이디어를 제안하고 앱의 핵심 로직과 백엔드 전체를 개발</li>
+                <li>Pleos Vehicle SDK로 문, 안전벨트, 주차 브레이크, 기어 신호를 읽어 출발을 감지하는 상태 머신 구현 (likely → matched → confirmed → taken, 45초 안에 출발하지 않으면 자동 철회)</li>
+                <li>차량들이 함께 쓰는 Firebase Firestore 백엔드, 여러 차가 동시에 수락해도 트랜잭션으로 한 대에게만 배정</li>
+                <li>NaviHelper SDK로 목적지 500m 진입 감지와 경로 변경, TextToSpeech·SpeechToText로 손을 쓰지 않는 음성 대화</li>
+              </ul>
+              <ul lang="en">
+                <li>Came up with the idea and built the core app logic and the entire backend</li>
+                <li>A departure-detection state machine that reads door, seatbelt, parking-brake and gear signals through the Pleos Vehicle SDK (likely → matched → confirmed → taken, auto-withdrawn if the car doesn't leave within 45 s)</li>
+                <li>A shared Firebase Firestore backend whose transactions guarantee only one car can claim a spot, even if several accept at once</li>
+                <li>A hands-free flow: NaviHelper SDK for the 500 m trigger and rerouting, TextToSpeech and SpeechToText for voice prompts and answers</li>
+              </ul>
+            </div>
+            <h4><span lang="ko">사용 기술</span><span lang="en">Built with</span></h4>
+              <div class="mini"><span>Kotlin</span><span>Jetpack Compose</span><span>Pleos Connect SDK</span><span>Android Automotive</span><span>Firebase Firestore</span></div>
+            <div class="links"><a href="https://github.com/bkhongorzul/NextSpot-Pleos" target="_blank" rel="noopener"><span lang="ko">GitHub에서 코드 보기</span><span lang="en">View code on GitHub</span></a></div>
+          </div>
+        </div></div>
+      </li>
+
+      <!-- ISIA -->
+      <li class="proj p-isia" id="isia">
+        <span class="n">03</span>
+        <button class="row" type="button" aria-expanded="false">
+          <div class="thumb" aria-hidden="true">
+            <span class="medal" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="14" r="6"/><path d="M8.5 9 6 2h4l2 4 2-4h4l-2.5 7"/></svg></span>
+            <svg viewBox="0 0 228 150" preserveAspectRatio="xMidYMid slice">
+              <rect x="22" y="30" width="54" height="30" rx="8" fill="#fff"/><rect x="22" y="66" width="54" height="30" rx="8" fill="#fff"/><rect x="22" y="102" width="54" height="30" rx="8" fill="#fff"/>
+              <circle cx="36" cy="45" r="5" fill="#6C4CE0" opacity=".9"/><circle cx="36" cy="81" r="5" fill="#6C4CE0" opacity=".6"/><circle cx="36" cy="117" r="5" fill="#6C4CE0" opacity=".35"/>
+              <rect x="46" y="42" width="22" height="5" rx="2.5" fill="#6C4CE0" opacity=".25"/><rect x="46" y="78" width="22" height="5" rx="2.5" fill="#6C4CE0" opacity=".25"/><rect x="46" y="114" width="22" height="5" rx="2.5" fill="#6C4CE0" opacity=".25"/>
+              <path d="M76 45 C104 45 104 81 132 81 M76 81 L132 81 M76 117 C104 117 104 81 132 81" fill="none" stroke="#6C4CE0" stroke-width="1.6" opacity=".55"/>
+              <rect x="132" y="38" width="76" height="86" rx="10" fill="#6C4CE0"/>
+              <text x="170" y="86" text-anchor="middle" font-family="Google Sans Flex, sans-serif" font-weight="700" font-size="32" fill="#fff">A</text>
+              <rect x="146" y="98" width="48" height="5" rx="2.5" fill="#fff" opacity=".5"/><rect x="152" y="108" width="36" height="5" rx="2.5" fill="#fff" opacity=".3"/>
+            </svg>
+          </div>
+          <div>
+            <div class="tags">
+              <span class="org"><span lang="ko">해커톤</span><span lang="en">Hackathon</span></span>
+              <span class="t">Multi-agent</span><span class="t">LLM</span>
+            </div>
+            <div class="award"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="14" r="6"/><path d="M8.5 9 6 2h4l2 4 2-4h4l-2.5 7"/></svg><span lang="ko">장려상 (4위) · Upstage PNU AI Agent Hackathon 2025</span><span lang="en">Encouragement Award, 4th · Upstage PNU AI Agent Hackathon 2025</span></div>
+            <h3>ISIA</h3>
+            <p class="desc">
+              <span lang="ko">수많은 아이디어 중 무엇이 성공할지, AI 에이전트 세 개가 동시에 평가해 점수와 보고서로 알려주는 도구.</span>
+              <span lang="en">Helps companies decide which ideas are worth pursuing: three AI agents evaluate each idea in parallel and return a scored report.</span>
+            </p>
+            <p class="role"><b><span lang="ko">맡은 일</span><span lang="en">My part</span></b><span lang="ko">아이디어 기획과 전체 파이프라인</span><span lang="en">The idea and the whole pipeline</span></p>
+            <span class="toggle"><i>↓</i><span class="open-t"><span lang="ko">자세히 보기</span><span lang="en">See details</span></span><span class="close"><span lang="ko">접기</span><span lang="en">Close</span></span></span>
+          </div>
+        </button>
+        <div class="more"><div>
+          <div class="panel">
+            <p class="problem" lang="ko">회사에는 실행할 수 있는 것보다 훨씬 많은 아이디어가 있고, 어떤 것이 성공할지 고르는 일은 느리고 주관적입니다. ISIA는 이 첫 번째 검토를 구조화합니다. 아이디어를 양식에 입력하면 서로 다른 관점을 맡은 AI 에이전트 세 개가 동시에 평가해, 한 장의 보고서로 결론을 돌려줍니다.</p>
+            <p class="problem" lang="en">Companies have far more ideas than they can pursue, and picking the ones that will succeed is slow and subjective. ISIA structures that first review: enter an idea through a form, and three AI agents, each with a different lens, evaluate it at the same time and return one clear report.</p>
+            <h4><span lang="ko">작동 방식</span><span lang="en">How it works</span></h4>
+            <ol class="steps">
+              <li><span lang="ko">양식으로 프로젝트·아이디어 정보 입력</span><span lang="en">Project or idea details submitted through a form</span></li>
+              <li><span lang="ko">기술 실현성, 시장성, 리스크 에이전트가 병렬 분석</span><span lang="en">Technical, market and risk agents analyse it in parallel</span></li>
+              <li><span lang="ko">결과를 종합해 점수와 등급 산출</span><span lang="en">Findings combined into an overall score and grade</span></li>
+              <li><span lang="ko">요약이 담긴 평가 보고서 제공</span><span lang="en">An evaluation report with a written summary</span></li>
+            </ol>
+            <div class="built">
+              <h4><span lang="ko">내가 만든 것</span><span lang="en">What I built</span></h4>
+              <ul lang="ko">
+                <li>아이디어를 기획하고 파이프라인 전체를 설계·구현</li>
+                <li>평가 관점별로 역할을 나눈 에이전트 세 개를 n8n에서 병렬로 실행하도록 구성</li>
+                <li>에이전트 결과를 하나의 점수·등급·요약으로 합치는 단계와 입력 양식, 결과 화면 구현</li>
+                <li>실제 제출물로 테스트해 해커톤에서 장려상(4위) 수상</li>
+              </ul>
+              <ul lang="en">
+                <li>Proposed the idea and designed and built the whole pipeline end to end</li>
+                <li>Split the evaluation into three agents with distinct roles, running in parallel in n8n</li>
+                <li>Built the step that merges agent outputs into one score, grade and summary, plus the intake form and results page</li>
+                <li>Tested with real submissions; won the Encouragement Award (4th) at the hackathon</li>
+              </ul>
+            </div>
+            <h4><span lang="ko">사용 기술</span><span lang="en">Built with</span></h4>
+              <div class="mini"><span>Upstage Solar LLM</span><span>n8n</span><span>Multi-agent</span></div>
+          </div>
+        </div></div>
+      </li>
+
+      <!-- BIZVISION -->
+      <li class="proj p-biz" id="bizvision">
+        <span class="n">04</span>
+        <button class="row" type="button" aria-expanded="false">
+          <div class="thumb" aria-hidden="true">
+            <span class="medal" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="14" r="6"/><path d="M8.5 9 6 2h4l2 4 2-4h4l-2.5 7"/></svg></span>
+            <svg viewBox="0 0 228 150" preserveAspectRatio="xMidYMid slice">
+              <g stroke="#E2701E" stroke-width="1" opacity=".22" fill="none">
+                <path d="M0 40 H228 M0 92 H228 M0 124 H228 M54 0 V150 M120 0 V150 M180 0 V150"/>
+                <path d="M0 140 L90 20 M140 150 L228 60" stroke-width="5" opacity=".6"/>
+              </g>
+              <circle cx="120" cy="74" r="40" fill="#E2701E" opacity=".12"/>
+              <circle cx="120" cy="74" r="24" fill="#E2701E" opacity=".18"/>
+              <circle cx="72" cy="56" r="4" fill="#E2701E" opacity=".5"/><circle cx="160" cy="104" r="4" fill="#E2701E" opacity=".5"/>
+              <circle cx="88" cy="112" r="4" fill="#E2701E" opacity=".5"/><circle cx="168" cy="48" r="4" fill="#E2701E" opacity=".5"/>
+              <path d="M120 50 C110 50 103 57 103 66 C103 79 120 94 120 94 C120 94 137 79 137 66 C137 57 130 50 120 50 Z" fill="#E2701E"/>
+              <circle cx="120" cy="66" r="6" fill="#fff"/>
+            </svg>
+          </div>
+          <div>
+            <div class="tags">
+              <span class="org"><span lang="ko">해커톤</span><span lang="en">Hackathon</span></span>
+              <span class="t">Map</span><span class="t">Public data</span><span class="t">React</span>
+            </div>
+            <div class="award"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="14" r="6"/><path d="M8.5 9 6 2h4l2 4 2-4h4l-2.5 7"/></svg><span lang="ko">3위 · PNU Tech Week 2025</span><span lang="en">3rd place · PNU Tech Week 2025</span></div>
+            <h3>BizVision</h3>
+            <p class="desc">
+              <span lang="ko">지역과 업종을 고르면 유동인구, 경쟁 업체, 상권 추이로 창업 입지의 사업성을 알려주는 플랫폼.</span>
+              <span lang="en">Pick a place and a type of business; it rates the location from foot traffic, competitors and area trends.</span>
+            </p>
+            <p class="role"><b><span lang="ko">맡은 일</span><span lang="en">My part</span></b><span lang="ko">지도·위치 기능, 데이터 대시보드</span><span lang="en">Map and location features, data dashboard</span></p>
+            <span class="toggle"><i>↓</i><span class="open-t"><span lang="ko">자세히 보기</span><span lang="en">See details</span></span><span class="close"><span lang="ko">접기</span><span lang="en">Close</span></span></span>
+          </div>
+        </button>
+        <div class="more"><div>
+          <div class="panel">
+            <p class="problem" lang="ko">가게를 어디에 열지는 대개 감에 의존합니다. BizVision은 수년간의 공공 상권 데이터와 지도 데이터를 결합해, 특정 위치에서 특정 업종이 얼마나 잘될지 한눈에 보여줍니다.</p>
+            <p class="problem" lang="en">Deciding where to open a shop is usually guesswork. BizVision combines years of government commercial-district data with map data to show how a specific type of business would do at a specific location.</p>
+            <h4><span lang="ko">작동 방식</span><span lang="en">How it works</span></h4>
+            <ol class="steps">
+              <li><span lang="ko">지역과 업종 선택 (예: 특정 동네의 카페)</span><span lang="en">Pick a location and a business type (say, a café in one district)</span></li>
+              <li><span lang="ko">유동인구, 주변 경쟁 업체, 상권 추이 분석</span><span lang="en">Foot traffic, nearby competitors and area trends are analysed</span></li>
+              <li><span lang="ko">지도와 그래프로 사업성 확인</span><span lang="en">Viability shown on a map and in charts</span></li>
+            </ol>
+            <div class="built">
+              <h4><span lang="ko">내가 만든 것</span><span lang="en">What I built</span></h4>
+              <ul lang="ko">
+                <li>지도 위에서 위치를 고르고 이동하는 위치·내비게이션 기능</li>
+                <li>상권 데이터를 탐색하는 인터랙티브 대시보드와 데이터 그래프</li>
+                <li>PNU Tech Week 3위 수상</li>
+              </ul>
+              <ul lang="en">
+                <li>Map, location picking and navigation features</li>
+                <li>The interactive dashboard and data graphs for exploring the commercial data</li>
+                <li>Won 3rd place at PNU Tech Week</li>
+              </ul>
+            </div>
+            <h4><span lang="ko">사용 기술</span><span lang="en">Built with</span></h4>
+              <div class="mini"><span>React</span><span>Map API</span><span>Public data</span></div>
+          </div>
+        </div></div>
+      </li>
+
+      <!-- CRYPTOLENS -->
+      <li class="proj p-crypto" id="cryptolens">
+        <span class="n">05</span>
+        <button class="row" type="button" aria-expanded="false">
+          <div class="thumb" aria-hidden="true">
+            <svg viewBox="0 0 228 150" preserveAspectRatio="xMidYMid slice">
+              <path d="M54 112 A60 60 0 0 1 174 112" fill="none" stroke="#fff" stroke-width="16" stroke-linecap="round"/>
+              <path d="M54 112 A60 60 0 0 1 84 60" fill="none" stroke="#E25555" stroke-width="16" stroke-linecap="round" opacity=".75"/>
+              <path d="M144 60 A60 60 0 0 1 174 112" fill="none" stroke="#1F9D74" stroke-width="16" stroke-linecap="round" opacity=".8"/>
+              <line x1="114" y1="112" x2="148" y2="72" stroke="#2B63D9" stroke-width="4" stroke-linecap="round"/>
+              <circle cx="114" cy="112" r="8" fill="#2B63D9"/>
+              <rect x="20" y="20" width="44" height="8" rx="4" fill="#2B63D9" opacity=".3"/>
+              <rect x="20" y="32" width="30" height="8" rx="4" fill="#2B63D9" opacity=".18"/>
+              <text x="200" y="30" text-anchor="end" font-family="Roboto Mono, monospace" font-size="9" fill="#2B63D9">BULLISH</text>
+            </svg>
+          </div>
+          <div>
+            <div class="tags">
+                            <span class="t">Sentiment</span><span class="t">LLM</span>
+            </div>
+            <h3>CryptoLens</h3>
+            <p class="desc">
+              <span lang="ko">여러 뉴스 소스를 한 번에 읽고 시장 분위기가 강세인지, 약세인지, 의견이 갈리는지 30초 안에 알려주는 도구.</span>
+              <span lang="en">Reads many crypto news sources at once and tells you in under 30 seconds whether the mood is bullish, bearish or split.</span>
+            </p>
+            <p class="role"><b><span lang="ko">맡은 일</span><span lang="en">My part</span></b><span lang="ko">리드 개발자</span><span lang="en">Lead developer</span></p>
+            <span class="toggle"><i>↓</i><span class="open-t"><span lang="ko">자세히 보기</span><span lang="en">See details</span></span><span class="close"><span lang="ko">접기</span><span lang="en">Close</span></span></span>
+          </div>
+        </button>
+        <div class="more"><div>
+          <div class="panel">
+            <p class="problem" lang="ko">암호화폐 뉴스는 너무 빠르게 쏟아지고, 커뮤니티마다 말하는 방향이 다릅니다. CryptoLens는 여러 소스를 한 번에 읽어 전체 분위기를 점수화하고, 주류 언론과 개인 투자자의 의견이 엇갈릴 때 이를 짚어 줍니다.</p>
+            <p class="problem" lang="en">Crypto news moves fast, and different communities often point in different directions. CryptoLens reads many sources at once, scores the overall mood, and flags when mainstream media and retail investors disagree.</p>
+            <h4><span lang="ko">작동 방식</span><span lang="en">How it works</span></h4>
+            <ol class="steps">
+              <li><span lang="ko">여러 뉴스·커뮤니티 소스 수집</span><span lang="en">News and community sources collected</span></li>
+              <li><span lang="ko">LLM으로 감성 분석</span><span lang="en">Sentiment scored with an LLM</span></li>
+              <li><span lang="ko">주류 언론과 개인 투자자 의견 차이 감지</span><span lang="en">Divergence between mainstream and retail detected</span></li>
+              <li><span lang="ko">30초 안에 강세·약세·혼조 보고서</span><span lang="en">Bullish, bearish or split report in under 30 s</span></li>
+            </ol>
+            <div class="built">
+              <h4><span lang="ko">내가 만든 것</span><span lang="en">What I built</span></h4>
+              <ul lang="ko">
+                <li>리드 개발자로 수집부터 감성 분석, 보고서 생성까지 전체 흐름을 이끌어 개발</li>
+              </ul>
+              <ul lang="en">
+                <li>As lead developer, led the build of the full flow, from collecting sources to sentiment scoring and the final report</li>
+              </ul>
+            </div>
+            <h4><span lang="ko">사용 기술</span><span lang="en">Built with</span></h4>
+              <div class="mini"><span>LLM</span><span>Sentiment analysis</span><span>Divergence detection</span></div>
+          </div>
+        </div></div>
+      </li>
+
+    </ol>
+  </section>
+
   <!-- ===================== SKILLS ===================== -->
-  <section id="skills">
-    <h2><span lang="ko">기술</span><span lang="en">Skills</span></h2>
-    <div class="card">
-      <dl class="skills">
-        <dt><span lang="ko">프로그래밍 언어</span><span lang="en">Languages</span></dt><dd>Python, JavaScript, Java, R</dd>
-        <dt>AI · LLM</dt><dd>Multi-Agent Systems, LLM Orchestration, n8n, Sentiment Analysis</dd>
-        <dt><span lang="ko">웹 · 도구</span><span lang="en">Web &amp; Tools</span></dt><dd>React, Node.js, Tailwind CSS, Figma, Git/GitHub</dd>
-        <dt><span lang="ko">언어</span><span lang="en">Spoken</span></dt>
-        <dd><span lang="ko">몽골어(모국어), 한국어(TOPIK 6급), 영어(IELTS 7.0)</span><span lang="en">Mongolian (native), Korean (TOPIK 6), English (IELTS 7.0)</span></dd>
-      </dl>
+  <section class="section" id="skills">
+    <span class="label"><span lang="ko">기술</span><span lang="en">Skills</span></span>
+    <div class="skills">
+      <div class="skcol">
+        <h4><span lang="ko">프로그래밍 언어</span><span lang="en">Languages</span></h4>
+        <ul><li>Python</li><li>TypeScript</li><li>JavaScript</li><li>Java</li></ul>
+      </div>
+      <div class="skcol">
+        <h4><span lang="ko">프론트엔드</span><span lang="en">Frontend</span></h4>
+        <ul><li>React</li><li>Next.js</li><li>Tailwind CSS</li><li>Figma</li></ul>
+      </div>
+      <div class="skcol">
+        <h4><span lang="ko">백엔드 · 인프라</span><span lang="en">Backend &amp; infra</span></h4>
+        <ul><li>Node.js</li><li>RabbitMQ</li><li>Vercel</li></ul>
+      </div>
+      <div class="skcol">
+        <h4>AI · ML</h4>
+        <ul><li>Hugging Face</li><li>Vertex AI</li><li><span lang="ko">멀티 에이전트 LLM</span><span lang="en">Multi-agent LLMs</span></li></ul>
+      </div>
+      <div class="skcol">
+        <h4><span lang="ko">사용 언어</span><span lang="en">Spoken</span></h4>
+        <ul>
+          <li><span lang="ko">몽골어</span><span lang="en">Mongolian</span> <em><span lang="ko">모국어</span><span lang="en">native</span></em></li>
+          <li><span lang="ko">영어</span><span lang="en">English</span> <em><span lang="ko">유창</span><span lang="en">fluent</span></em></li>
+          <li><span lang="ko">한국어</span><span lang="en">Korean</span> <em><span lang="ko">상급</span><span lang="en">advanced</span></em></li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== THANKS ===================== -->
+  <section class="thanks">
+    <h2><span lang="ko">방문해 주셔서 감사합니다.</span><span lang="en">Thanks for visiting.</span></h2>
+    <p lang="ko">함께 일하거나 이야기 나누고 싶으시다면 언제든 메일 주세요.</p>
+    <p lang="en">If you'd like to work together or just talk, I'd love to hear from you.</p>
+    <div class="cta">
+      <a class="btn dark" href="mailto:khongorzul.batt@gmail.com">khongorzul.batt@gmail.com</a>
+      <a class="btn" href="resume-ko.pdf" download lang="ko">이력서 (국문)</a>
+      <a class="btn" href="resume-en.pdf" download lang="ko">이력서 (영문)</a>
+      <a class="btn" href="resume-en.pdf" download lang="en">Resume (English)</a>
+      <a class="btn" href="resume-ko.pdf" download lang="en">Resume (Korean)</a>
     </div>
   </section>
 
@@ -344,27 +739,53 @@
 
 <footer>
   <div class="wrap">
-    © 2026 Khongorzul Battumur · <a href="mailto:khongorzul.batt@gmail.com">khongorzul.batt@gmail.com</a> ·
-    <a href="https://github.com/bkhongorzul" target="_blank" rel="noopener">github.com/bkhongorzul</a>
+    <span>© 2026 Khongorzul Battumur</span>
+    <span class="sep"><span lang="ko">HTML로 직접 만들고 GitHub Pages로 배포</span><span lang="en">Hand-built in HTML, hosted on GitHub Pages</span></span>
+    <a href="https://github.com/bkhongorzul" target="_blank" rel="noopener" aria-label="GitHub">
+      <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 .5C5.7.5.5 5.7.5 12c0 5.1 3.3 9.4 7.9 10.9.6.1.8-.3.8-.6v-2c-3.2.7-3.9-1.5-3.9-1.5-.5-1.3-1.3-1.7-1.3-1.7-1-.7.1-.7.1-.7 1.2.1 1.8 1.2 1.8 1.2 1 1.8 2.8 1.3 3.5 1 .1-.8.4-1.3.7-1.6-2.6-.3-5.3-1.3-5.3-5.7 0-1.3.5-2.3 1.2-3.1-.1-.3-.5-1.5.1-3.1 0 0 1-.3 3.3 1.2a11.5 11.5 0 0 1 6 0C17.3 4.7 18.3 5 18.3 5c.6 1.6.2 2.8.1 3.1.8.8 1.2 1.8 1.2 3.1 0 4.4-2.7 5.4-5.3 5.7.4.4.8 1.1.8 2.2v3.3c0 .3.2.7.8.6A11.5 11.5 0 0 0 23.5 12C23.5 5.7 18.3.5 12 .5Z"/></svg>
+    </a>
+    <a href="mailto:khongorzul.batt@gmail.com" aria-label="Email">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3.5 6 8.5 7 8.5-7"/></svg>
+    </a>
   </div>
 </footer>
 
 <script>
-  (function () {
-    var root = document.documentElement;
-    var buttons = document.querySelectorAll('.lang-toggle button');
-    function setLang(lang) {
-      root.setAttribute('data-lang', lang);
-      root.setAttribute('lang', lang);
-      buttons.forEach(function (b) { b.classList.toggle('on', b.dataset.set === lang); });
-      try { localStorage.setItem('lang', lang); } catch (e) {}
-    }
-    var saved = null;
-    try { saved = localStorage.getItem('lang'); } catch (e) {}
-    var params = new URLSearchParams(location.search);
-    setLang(params.get('lang') || saved || 'ko');
-    buttons.forEach(function (b) { b.addEventListener('click', function () { setLang(b.dataset.set); }); });
-  })();
+(function () {
+  var root = document.documentElement;
+
+  /* language */
+  var langBtns = document.querySelectorAll('.lang button');
+  function setLang(l) {
+    root.setAttribute('data-lang', l); root.setAttribute('lang', l);
+    langBtns.forEach(function (b) { var on = b.dataset.set === l; b.classList.toggle('on', on); b.setAttribute('aria-pressed', on); });
+    try { localStorage.setItem('lang', l); } catch (e) {}
+  }
+  var saved = null; try { saved = localStorage.getItem('lang'); } catch (e) {}
+  setLang(new URLSearchParams(location.search).get('lang') || saved || 'ko');
+  langBtns.forEach(function (b) { b.addEventListener('click', function () { setLang(b.dataset.set); }); });
+
+  /* header background once scrolled */
+  var hdr = document.querySelector('header');
+  function onScroll() { hdr.classList.toggle('scrolled', window.scrollY > 10); }
+  window.addEventListener('scroll', onScroll, { passive: true }); onScroll();
+
+  /* dark mode */
+  document.getElementById('mode').addEventListener('click', function () {
+    var t = root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+    root.setAttribute('data-theme', t);
+    try { localStorage.setItem('theme', t); } catch (e) {}
+  });
+
+  /* expand / collapse projects */
+  document.querySelectorAll('.proj .row').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      var li = btn.closest('.proj');
+      var open = li.classList.toggle('open');
+      btn.setAttribute('aria-expanded', open);
+    });
+  });
+})();
 </script>
 </body>
 </html>
